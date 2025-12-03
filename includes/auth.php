@@ -1,0 +1,70 @@
+<?php
+/**
+ * CampusConnect - Authentication & Authorization Subsystem
+ * Handles session protection, role verification, and login state management.
+ */
+
+require_once __DIR__ . '/functions.php';
+
+/**
+ * Check if a user is currently authenticated
+ */
+function is_logged_in(): bool {
+    return !empty($_SESSION['user_id']) && !empty($_SESSION['user_role']);
+}
+
+/**
+ * Get current authenticated user details from session
+ */
+function get_logged_in_user(): ?array {
+    if (!is_logged_in()) {
+        return null;
+    }
+    return [
+        'id'          => $_SESSION['user_id'],
+        'name'        => $_SESSION['user_name'] ?? '',
+        'email'       => $_SESSION['user_email'] ?? '',
+        'role'        => $_SESSION['user_role'] ?? '',
+        'department'  => $_SESSION['user_department'] ?? '',
+        'roll_number' => $_SESSION['user_roll_number'] ?? '',
+    ];
+}
+
+/**
+ * Check if the current user has a specific role
+ */
+function has_role(string $role): bool {
+    return is_logged_in() && ($_SESSION['user_role'] === $role);
+}
+
+/**
+ * Enforce authentication requirement on protected routes
+ */
+function require_login(): void {
+    if (!is_logged_in()) {
+        set_flash('warning', 'Please log in to access this portal page.');
+        header('Location: ' . url('login.php'));
+        exit;
+    }
+}
+
+/**
+ * Enforce specific role requirement on role-restricted routes
+ */
+function require_role(string $role): void {
+    require_login();
+    if ($_SESSION['user_role'] !== $role) {
+        http_response_code(403);
+        // Show clean unauthorized page
+        require_once __DIR__ . '/header.php';
+        echo '<div class="container py-5 text-center">
+            <div class="card shadow-sm border-danger p-4 mx-auto" style="max-width: 500px;">
+                <div class="text-danger mb-3"><i class="bi bi-shield-lock display-4"></i></div>
+                <h3 class="card-title fw-bold">Access Denied (403)</h3>
+                <p class="text-muted">You do not have administrative authorization to access this area.</p>
+                <a href="' . url('student/dashboard.php') . '" class="btn btn-primary mt-2">Return to Student Dashboard</a>
+            </div>
+        </div>';
+        require_once __DIR__ . '/footer.php';
+        exit;
+    }
