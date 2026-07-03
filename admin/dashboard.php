@@ -138,4 +138,134 @@ require_once dirname(__DIR__) . '/includes/header.php';
           <div class="stat-icon-wrapper bg-success-subtle text-success">
             <i class="bi bi-calendar2-check"></i>
           </div>
-</div></div></div><?php include '../includes/footer.php'; ?>
+        </div>
+      </div>
+
+      <div class="col-6 col-md-4 col-xl">
+        <div class="stat-card">
+          <div>
+            <div class="stat-label">New Inquiries</div>
+            <div class="stat-value text-warning"><?= number_format($stats['new_feedback']) ?></div>
+            <small class="text-muted">Pending review</small>
+          </div>
+          <div class="stat-icon-wrapper bg-warning-subtle text-warning-emphasis">
+            <i class="bi bi-chat-left-dots"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Activity Row -->
+    <div class="row g-4">
+      
+      <!-- Recent Students Table -->
+      <div class="col-12 col-xl-7">
+        <div class="card card-custom h-100 shadow-none border">
+          <div class="card-header-clean">
+            <span class="text-body"><i class="bi bi-people text-primary me-2"></i>Recently Registered Students</span>
+            <a href="<?= url('admin/users.php') ?>" class="small text-primary text-decoration-none">Manage All Users</a>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-custom mb-0 align-middle">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Roll Number</th>
+                    <th>Department</th>
+                    <th>Joined</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php if (empty($recentUsers)): ?>
+                    <tr>
+                      <td colspan="4" class="text-center py-4 text-muted">No student records found.</td>
+                    </tr>
+                  <?php else: ?>
+                    <?php foreach ($recentUsers as $u): ?>
+                      <tr>
+                        <td>
+                          <div class="fw-bold text-body"><?= e($u['name']) ?></div>
+                          <small class="text-muted"><?= e($u['email']) ?></small>
+                        </td>
+                        <td><code><?= e($u['roll_number'] ?: '—') ?></code></td>
+                        <td><span class="badge bg-secondary-subtle text-secondary"><?= e($u['department'] ?: 'General') ?></span></td>
+                        <td><small class="text-muted"><?= time_ago($u['created_at']) ?></small></td>
+                      </tr>
+                    <?php endforeach; ?>
+                  <?php endif; ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Recent Registrations & Feedback -->
+      <div class="col-12 col-xl-5">
+        
+        <!-- Recent Feedback -->
+        <div class="card card-custom mb-4 shadow-none border">
+          <div class="card-header-clean">
+            <span class="text-body"><i class="bi bi-chat-quote text-primary me-2"></i>Recent Inquiries</span>
+            <a href="<?= url('admin/feedback.php') ?>" class="small text-primary text-decoration-none">Review</a>
+          </div>
+          <div class="card-body p-3">
+            <?php if (empty($recentFeedback)): ?>
+              <div class="text-center py-3 text-muted small">No recent feedback submitted.</div>
+            <?php else: ?>
+              <div class="d-flex flex-column gap-2">
+                <?php foreach ($recentFeedback as $fb): ?>
+                  <div class="p-2 border rounded bg-body-tertiary">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <span class="fw-bold small text-body"><?= e($fb['subject']) ?></span>
+                      <?php if ($fb['status'] === 'new'): ?>
+                        <span class="badge bg-warning-subtle text-warning-emphasis">New</span>
+                      <?php else: ?>
+                        <span class="badge bg-secondary-subtle text-secondary"><?= e($fb['status']) ?></span>
+                      <?php endif; ?>
+                    </div>
+                    <div class="d-flex justify-content-between small text-muted">
+                      <span>By <?= e($fb['student_name']) ?></span>
+                      <span><?= time_ago($fb['created_at']) ?></span>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            <?php endif; ?>
+          </div>
+        </div>
+
+        <!-- Recent Event Registrations -->
+        <div class="card card-custom shadow-none border">
+          <div class="card-header-clean">
+            <span class="text-body"><i class="bi bi-calendar-check text-primary me-2"></i>Recent Event Registrations</span>
+            <a href="<?= url('admin/events.php') ?>" class="small text-primary text-decoration-none">Details</a>
+          </div>
+          <div class="card-body p-3">
+            <?php if (empty($recentRegistrations)): ?>
+              <div class="text-center py-3 text-muted small">No event registrations recorded yet.</div>
+            <?php else: ?>
+              <div class="d-flex flex-column gap-2">
+                <?php foreach ($recentRegistrations as $reg): ?>
+                  <div class="d-flex justify-content-between align-items-center small p-2 border rounded bg-body-tertiary">
+                    <div>
+                      <div class="fw-bold text-body"><?= e($reg['student_name']) ?></div>
+                      <div class="text-muted"><?= e($reg['event_title']) ?></div>
+                    </div>
+                    <span class="text-muted flex-shrink-0"><?= time_ago($reg['registered_at']) ?></span>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            <?php endif; ?>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<?php require_once dirname(__DIR__) . '/includes/footer.php'; ?>
