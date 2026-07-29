@@ -68,3 +68,42 @@ function require_role(string $role): void {
         require_once __DIR__ . '/footer.php';
         exit;
     }
+}
+
+/**
+ * Authorize user and establish session with ID regeneration
+ */
+function login_user(array $user): void {
+    // Regenerate session ID to prevent session fixation attacks
+    session_regenerate_id(true);
+
+    $_SESSION['user_id']          = (int)$user['id'];
+    $_SESSION['user_name']        = $user['name'];
+    $_SESSION['user_email']       = $user['email'];
+    $_SESSION['user_role']        = $user['role'];
+    $_SESSION['user_department']  = $user['department'] ?? '';
+    $_SESSION['user_roll_number'] = $user['roll_number'] ?? '';
+    $_SESSION['logged_in_time']   = time();
+}
+
+/**
+ * Terminate user session completely
+ */
+function logout_user(): void {
+    $_SESSION = [];
+
+    if (ini_get('session.use_cookies')) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            $params['path'],
+            $params['domain'],
+            $params['secure'],
+            $params['httponly']
+        );
+    }
+
+    session_destroy();
+}
