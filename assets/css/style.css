@@ -268,3 +268,80 @@ main {
 .btn-primary:hover {
   background-color: var(--cc-primary-hover);
   border-color: var(--cc-primary-hover);
+}
+
+/* Badges */
+.badge {
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.35em 0.65em;
+  border-radius: 4px;
+}
+
+/* Search Box Container */
+.search-wrapper {
+  position: relative;
+}
+
+.search-wrapper i {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cc-text-muted);
+}
+
+.search-input {
+  padding-left: 2.35rem;
+}
+
+/* Toast styling */
+.toast-container {
+  z-index: 1090;
+}
+
+/* Footer */
+.footer-custom {
+  background-color: var(--cc-card-bg);
+  border-top: 1px solid var(--cc-card-border);
+  color: var(--cc-text-muted);
+  font-size: 0.88rem;
+  padding: 1.5rem 0;
+  margin-top: auto;
+}
+
+/* Educational Syllabus Demo Marquee Box */
+.syllabus-marquee-container {
+  background-color: var(--cc-primary-subtle);
+  border: 1px solid var(--cc-primary);
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  .portal-container {
+    flex-direction: column;
+  }
+  .portal-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--cc-sidebar-border);
+    padding: 0.75rem;
+  }
+  .portal-content {
+    padding: 1rem;
+  }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
