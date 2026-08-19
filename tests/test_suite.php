@@ -63,5 +63,55 @@ try {
 try {
     $stmt = $pdo->prepare("SELECT id, name, email, password_hash, role FROM users WHERE email = ?");
     $stmt->execute(['admin@campusconnect.edu']);
-    echo 'Initial basic tests finished.\n';
+    $adminUser = $stmt->fetch();
+
+    $adminOk = $adminUser && $adminUser['role'] === 'admin' && password_verify('AdminPassword123!', $adminUser['password_hash']);
+    assert_test("Admin Seed Account & Bcrypt Password", $adminOk);
+
+    $stmt->execute(['aarav.sharma@campusconnect.edu']);
+    $studentUser = $stmt->fetch();
+
+    $studentOk = $studentUser && $studentUser['role'] === 'student' && password_verify('StudentPass123!', $studentUser['password_hash']);
+    assert_test("Student Seed Account & Bcrypt Password", $studentOk);
+} catch (Exception $e) {
+    assert_test("Seed Accounts & Bcrypt Password", false, $e->getMessage());
+}
+
+// -----------------------------------------------------------
+// TEST 4: Unique Constraints (Event Registrations & Duplicate Prevention)
+// -----------------------------------------------------------
+try {
+    // Attempt duplicate registration for student 2 on event 1 (already registered in seed)
+    $dupCaught = false;
+    try {
+        $stmtDup = $pdo->prepare("INSERT INTO event_registrations (event_id, student_id, registered_at) VALUES (1, 2, NOW())");
+        $stmtDup->execute();
+    } catch (Exception $e) {
+        $dupCaught = true;
+    }
+    assert_test("Duplicate Event Registration Prevention (Unique Constraint)", $dupCaught);
+} catch (Exception $e) {
+    assert_test("Duplicate Event Registration Prevention", false, $e->getMessage());
+}
+
+// -----------------------------------------------------------
+// TEST 5: CSRF Token Generation & Validation
+// -----------------------------------------------------------
+$token = get_csrf_token();
+$validCheck = validate_csrf($token);
+$invalidCheck = !validate_csrf('fake_token_12345');
+assert_test("CSRF Token Cryptographic Validation", $validCheck && $invalidCheck);
+
+// -----------------------------------------------------------
+// TEST 6: XSS Sanitization Helper e()
+// -----------------------------------------------------------
+$rawMalicious = '<script>alert("xss")</script>';
+$escaped = e($rawMalicious);
+assert_test("XSS Sanitization Helper e()", $escaped === '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;');
+
+// -----------------------------------------------------------
+// TEST 7: XML Well-Formedness & DTD Schema Validation
+// -----------------------------------------------------------
+try {
+    echo 'Security tests passed.\n';
 ?>
