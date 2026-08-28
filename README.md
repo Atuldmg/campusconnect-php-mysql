@@ -118,3 +118,133 @@ flowchart TD
     Status -->|"Success"| Success
     Status -->|"Error"| Error
     
+    Success -->|"Response Payload"| Gateway
+    Error -->|"Response Payload"| Gateway
+    Gateway -->|"Render to Viewport"| Browser
+
+    classDef client fill:#2563eb,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
+    classDef gateway fill:#1e293b,stroke:#475569,stroke-width:1px,color:#f8fafc;
+    classDef engine fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#f8fafc;
+    classDef decision fill:#1e293b,stroke:#94a3b8,stroke-width:2px,color:#f8fafc;
+    classDef success fill:#059669,stroke:#34d399,stroke-width:2px,color:#ffffff;
+    classDef error fill:#dc2626,stroke:#f87171,stroke-width:2px,color:#ffffff;
+    classDef xmlStore fill:#1e293b,stroke:#eab308,stroke-width:1px,color:#f8fafc;
+    classDef sqlStore fill:#1e293b,stroke:#06b6d4,stroke-width:1px,color:#f8fafc;
+```
+
+### Component & Execution Flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Frontend as Frontend
+    participant PHP as PHP Backend
+    participant XML as XML Data
+    participant DB as MySQL Database
+
+    Note over Frontend, DB: 1. Student Course Lookup & Scorecard
+    Frontend->>PHP: POST student_lookup.php { enrollment_no: "2024BCAR001" }
+    PHP->>XML: simplexml_load_file("students.xml") -> xpath query
+    XML-->>PHP: Student Record: Aarav Sharma [88, 92, 79, 95, 84]
+    PHP->>PHP: computeTotal(438/500) & computePercentage(87.6%)
+    PHP-->>Frontend: { status: 200, scorecard_html, grade: "Distinction" }
+    Frontend->>Frontend: UI Transition to Scorecard State
+
+    Note over Frontend, DB: 2. Relational Transactional Mutation
+    Frontend->>PHP: POST mysql_crud_demo.php { action: "UPDATE", id: 101 }
+    PHP->>DB: PDO prepare & execute("UPDATE employees SET salary = ?")
+    DB-->>PHP: { affected_rows: 1, status: "OK" }
+    PHP-->>Frontend: { status: 200, records: [...], notice: "Record Updated" }
+    Frontend->>Frontend: UI Transition to Updated Data Grid
+```
+
+### Folder Structure
+
+```
+Final-AWT-Project/
+├── index.php                      # Public landing page with live database statistics
+├── about.php                      # Project documentation, architecture & jQuery demo
+├── courses.php                    # XML Course Catalogue parser & DTD validator
+├── login.php                      # User authentication gateway (email & password)
+├── register.php                   # Student self-registration form
+├── logout.php                     # Session destruction and termination
+├── download.php                   # Authorized, path-traversal protected file gateway
+│
+├── config/
+│   ├── database.php               # PDO database connection manager (MySQL + fallback)
+│   └── local.php                  # Optional local database overrides (git-ignored)
+│
+├── includes/
+│   ├── functions.php              # Utility functions (url(), e(), time_ago(), flash messages)
+│   ├── auth.php                   # Session verification, role guards (require_role)
+│   ├── csrf.php                   # Cryptographic CSRF token generation and validation
+│   ├── header.php                 # Semantic HTML5 header, navbar & theme switcher
+│   ├── footer.php                 # Semantic HTML5 footer and asset loading
+│   ├── student_sidebar.php        # Navigation menu for Student Portal
+│   └── admin_sidebar.php          # Navigation menu for Administrator Portal
+│
+├── student/
+│   ├── dashboard.php              # Student overview, statistics & deadlines
+│   ├── resources.php              # Study material library with live AJAX search
+│   ├── assignments.php            # Assignments listing, file submissions & grades
+│   ├── events.php                 # Campus events calendar & registration
+│   ├── feedback.php               # Grievance submission with character counter
+│   └── profile.php                # Profile editing & password change
+│
+├── admin/
+│   ├── dashboard.php              # Administrator overview & system statistics
+│   ├── users.php                  # User and student management (CRUD)
+│   ├── announcements.php          # Campus circulars publisher (CRUD)
+│   ├── resources.php              # Study material upload and management (CRUD)
+│   ├── assignments.php            # Assignment creator & student submissions grading
+│   ├── events.php                 # Campus events scheduler & participant rosters
+│   └── feedback.php               # Student inquiries moderation and response
+│
+├── api/
+│   ├── search.php                 # JSON API endpoint for live resource search
+│   └── announcements.php          # JSON API endpoint for latest circulars
+│
+├── actions/
+│   ├── register_event.php         # Standalone action endpoint for event sign-ups
+│   └── submit_feedback.php        # Standalone action endpoint for grievance submissions
+│
+├── assets/
+│   ├── css/
+│   │   └── style.css              # Custom stylesheet, design tokens, light/dark themes
+│   └── js/
+│       ├── app.js                 # Theme switcher, password visibility, modals
+│       ├── validation.js          # Client-side form validation
+│       └── search.js              # AJAX live search handler with debouncing
+│
+├── uploads/
+│   ├── resources/                 # Storage for uploaded lecture notes and slides
+│   └── submissions/               # Storage for uploaded student assignment files
+│
+├── xml/
+│   ├── courses.xml                # Well-formed XML course catalogue
+│   └── courses.dtd                # Document Type Definition (DTD) validation schema
+│
+├── database/
+│   └── campusconnect.sql          # Complete importable MySQL schema and seed data
+│
+├── scripts/
+│   ├── create_admin.php           # CLI administrator provisioning script
+│   └── init_test_db.php           # Offline test database initializer
+│
+├── tests/
+│   └── test_suite.php             # Automated QA test suite
+│
+├── .gitignore                     # Git exclusion rules
+└── README.md                      # Comprehensive project documentation
+```
+
+---
+
+## Database Architecture & Schema Summary
+
+The database is named `campusconnect` and incorporates relational integrity with foreign keys, unique constraints, and indexes.
+
+### Relational Schema Summary:
+
+1. **`users`**
+   - `id` (INT, PK, AUTO_INCREMENT)
