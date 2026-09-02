@@ -248,3 +248,113 @@ The database is named `campusconnect` and incorporates relational integrity with
 
 1. **`users`**
    - `id` (INT, PK, AUTO_INCREMENT)
+   - `name` (VARCHAR 100), `email` (VARCHAR 150, UNIQUE), `password_hash` (VARCHAR 255)
+   - `role` (ENUM: `student`, `admin`), `department`, `roll_number`, `phone`
+   - `created_at`, `updated_at` (TIMESTAMP)
+
+2. **`announcements`**
+   - `id` (INT, PK, AUTO_INCREMENT)
+   - `title` (VARCHAR 200), `content` (TEXT), `category` (VARCHAR 50), `is_pinned` (TINYINT 1)
+   - `created_by` (INT, FK -> `users.id` ON DELETE CASCADE)
+   - `created_at`, `updated_at` (TIMESTAMP)
+
+3. **`resources`**
+   - `id` (INT, PK, AUTO_INCREMENT)
+   - `title` (VARCHAR 200), `subject` (VARCHAR 100), `description` (TEXT)
+   - `file_path` (VARCHAR 255), `file_name` (VARCHAR 255), `file_size` (INT), `file_type` (VARCHAR 100)
+   - `uploaded_by` (INT, FK -> `users.id` ON DELETE CASCADE), `created_at` (TIMESTAMP)
+
+4. **`assignments`**
+   - `id` (INT, PK, AUTO_INCREMENT)
+   - `title` (VARCHAR 200), `subject` (VARCHAR 100), `description` (TEXT), `due_date` (DATETIME), `max_marks` (INT)
+   - `created_by` (INT, FK -> `users.id` ON DELETE CASCADE), `created_at` (TIMESTAMP)
+
+5. **`assignment_submissions`**
+   - `id` (INT, PK, AUTO_INCREMENT)
+   - `assignment_id` (INT, FK -> `assignments.id` ON DELETE CASCADE)
+   - `student_id` (INT, FK -> `users.id` ON DELETE CASCADE)
+   - `file_path` (VARCHAR 255), `file_name` (VARCHAR 255), `submission_notes` (TEXT)
+   - `status` (ENUM: `pending`, `submitted`, `graded`), `grade` (VARCHAR 10), `feedback` (TEXT)
+   - `submitted_at`, `updated_at` (TIMESTAMP)
+   - **Constraint:** `UNIQUE KEY (assignment_id, student_id)`
+
+6. **`events`**
+   - `id` (INT, PK, AUTO_INCREMENT)
+   - `title` (VARCHAR 200), `description` (TEXT), `event_date` (DATETIME), `venue` (VARCHAR 150), `capacity` (INT), `category` (VARCHAR 50)
+   - `created_by` (INT, FK -> `users.id` ON DELETE CASCADE), `created_at` (TIMESTAMP)
+
+7. **`event_registrations`**
+   - `id` (INT, PK, AUTO_INCREMENT)
+   - `event_id` (INT, FK -> `events.id` ON DELETE CASCADE)
+   - `student_id` (INT, FK -> `users.id` ON DELETE CASCADE)
+   - `registered_at` (TIMESTAMP)
+   - **Constraint:** `UNIQUE KEY (event_id, student_id)`
+
+8. **`feedback`**
+   - `id` (INT, PK, AUTO_INCREMENT)
+   - `student_id` (INT, FK -> `users.id` ON DELETE CASCADE)
+   - `subject` (VARCHAR 150), `category` (VARCHAR 50), `message` (TEXT)
+   - `status` (ENUM: `new`, `reviewed`, `resolved`), `admin_response` (TEXT)
+   - `created_at`, `updated_at` (TIMESTAMP)
+
+---
+
+## XAMPP Local Installation & Setup Guide
+
+Follow these steps to run CampusConnect locally using XAMPP:
+
+### Step 1: Clone or Copy to XAMPP `htdocs`
+Place the project directory inside your XAMPP web root:
+- **macOS:** `/Applications/XAMPP/xamppfiles/htdocs/campusconnect/`
+- **Windows:** `C:\xampp\htdocs\campusconnect\`
+- **Linux:** `/opt/lampp/htdocs/campusconnect/`
+
+### Step 2: Start Apache and MySQL Services
+1. Open the **XAMPP Control Panel**.
+2. Click **Start** for both **Apache** and **MySQL**.
+3. Verify that both modules display a green status indicator.
+
+### Step 3: Import the Database Schema
+1. Open your web browser and navigate to **phpMyAdmin**:
+   ```
+   http://localhost/phpmyadmin/
+   ```
+2. Click the **Import** tab on the top navigation bar.
+3. Click **Choose File** and select:
+   ```
+   campusconnect/database/campusconnect.sql
+   ```
+4. Click **Import** (or **Go**).
+5. Verify that the `campusconnect` database is created with all 8 tables and demonstration records.
+
+### Step 4: Configure Database Credentials (If Needed)
+CampusConnect is configured to connect to standard XAMPP defaults out-of-the-box (`host: 127.0.0.1`, `user: root`, `password: ''`, `database: campusconnect`).
+
+If your local MySQL uses a custom password or port, create a file named `config/local.php`:
+```php
+<?php
+define('DB_HOST', '127.0.0.1');
+define('DB_PORT', '3306');
+define('DB_NAME', 'campusconnect');
+define('DB_USER', 'root');
+define('DB_PASS', 'your_password_here');
+```
+
+### Step 5: Launch the Application
+Open your web browser and navigate to:
+```
+http://localhost/campusconnect/
+```
+*(The automatic base URL detection helper `url()` ensures all navigation links, CSS stylesheets, images, and API requests resolve accurately regardless of whether the folder is named `campusconnect` or `Final-AWT-Project`).*
+
+---
+
+## Default Demonstration Accounts
+
+Pre-seeded accounts are provided for testing and evaluation viva demonstrations:
+
+| Role | Email Address | Password | Details |
+| :--- | :--- | :--- | :--- |
+| **Administrator** | `admin@campusconnect.edu` | `AdminPassword123!` | System Administrator (Full access) |
+| **Student** | `aarav.sharma@campusconnect.edu` | `StudentPass123!` | BCA Semester 5 &bull; Roll: `CC-2023-BCA-001` |
+| **Student** | `priya.patel@campusconnect.edu` | `StudentPass123!` | BCA Semester 5 &bull; Roll: `CC-2023-BCA-002` |
