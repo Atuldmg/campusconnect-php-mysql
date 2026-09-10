@@ -43,5 +43,26 @@ try {
             'description'    => $item['description'],
             'file_name'      => $item['file_name'],
             'file_size'      => (int)$item['file_size'],
-    echo json_encode(['success' => true, 'data' => []]);
-} catch (Exception $e) { echo json_encode(['error' => $e->getMessage()]); }
+            'formatted_size' => format_bytes((int)$item['file_size']),
+            'file_type'      => $item['file_type'],
+            'created_at'     => $item['created_at'],
+            'time_ago'       => time_ago($item['created_at']),
+        ];
+    }, $results);
+
+    echo json_encode([
+        'status' => 'success',
+        'count'  => count($formatted),
+        'query'  => $q,
+        'subject'=> $subject,
+        'data'   => $formatted,
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'Failed to process search query.',
+        'details' => $e->getMessage(),
+    ]);
+}
