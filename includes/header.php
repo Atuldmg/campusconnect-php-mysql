@@ -175,3 +175,5 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' — CampusConnect' : 'CampusConn
   </div>
 
   <main>
+
+<!-- Responsive navbar component with dark mode support -->
