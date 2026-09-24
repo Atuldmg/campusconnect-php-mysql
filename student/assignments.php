@@ -148,4 +148,149 @@ require_once dirname(__DIR__) . '/includes/header.php';
         <h4 class="fw-bold mb-1">Course Assignments & Tasks</h4>
         <p class="text-muted small mb-0">Review submission deadlines, upload solutions, and inspect faculty feedback.</p>
       </div>
-</div></div></div><?php include '../includes/footer.php'; ?>
+      <span class="badge bg-secondary-subtle text-secondary px-3 py-2">
+        <?= count($assignments) ?> Total Assignments
+      </span>
+    </div>
+
+    <?php if (!empty($error)): ?>
+      <div class="alert alert-danger py-2 mb-3 small" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i><?= e($error) ?>
+      </div>
+    <?php endif; ?>
+
+    <!-- Assignments List -->
+    <div class="row g-3">
+      <?php if (empty($assignments)): ?>
+        <div class="col-12">
+          <div class="card card-custom p-5 text-center text-muted">
+            <i class="bi bi-journal-check display-5 d-block mb-2"></i>
+            <h6>No assignments found.</h6>
+            <small>All caught up! Check back when your instructors post new tasks.</small>
+          </div>
+        </div>
+      <?php else: ?>
+        <?php foreach ($assignments as $asg): ?>
+          <?php 
+            $isOverdue = strtotime($asg['due_date']) < time();
+            $status = $asg['submission_status'] ?? 'pending';
+          ?>
+          <div class="col-12">
+            <div class="card card-custom shadow-none border">
+              <div class="card-body p-4">
+                <div class="row g-3 align-items-center">
+                  
+                  <div class="col-12 col-md-7">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                      <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><?= e($asg['subject']) ?></span>
+                      <?php if ($status === 'graded'): ?>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle">
+                          <i class="bi bi-check-all me-1"></i>Graded: <?= e($asg['grade']) ?>
+                        </span>
+                      <?php elseif ($status === 'submitted'): ?>
+                        <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle">
+                          <i class="bi bi-check2 me-1"></i>Submitted
+                        </span>
+                      <?php else: ?>
+                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
+                          <i class="bi bi-hourglass-split me-1"></i>Pending Submission
+                        </span>
+                      <?php endif; ?>
+
+                      <?php if ($isOverdue && $status === 'pending'): ?>
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Overdue</span>
+                      <?php endif; ?>
+                    </div>
+
+                    <h5 class="fw-bold text-body mb-2"><?= e($asg['title']) ?></h5>
+                    <p class="text-muted small mb-2"><?= nl2br(e($asg['description'])) ?></p>
+
+                    <div class="d-flex gap-3 text-muted small flex-wrap">
+                      <span><i class="bi bi-calendar-event me-1"></i><strong>Due:</strong> <?= format_date($asg['due_date'], 'M d, Y h:i A') ?></span>
+                      <span><i class="bi bi-award me-1"></i><strong>Max Marks:</strong> <?= e($asg['max_marks']) ?></span>
+                      <?php if ($asg['submitted_at']): ?>
+                        <span><i class="bi bi-clock-history me-1"></i><strong>Submitted:</strong> <?= time_ago($asg['submitted_at']) ?></span>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-5 text-md-end border-top border-md-top-0 pt-3 pt-md-0">
+                    <?php if ($status === 'graded'): ?>
+                      <div class="p-2 border rounded bg-body-tertiary text-start mb-2 small">
+                        <strong>Faculty Evaluation:</strong>
+                        <div class="text-success fw-bold">Score: <?= e($asg['grade']) ?> / <?= e($asg['max_marks']) ?></div>
+                        <?php if ($asg['feedback']): ?>
+                          <div class="text-muted mt-1 fst-italic">"<?= e($asg['feedback']) ?>"</div>
+                        <?php endif; ?>
+                      </div>
+                    <?php endif; ?>
+
+                    <button 
+                      type="button" 
+                      class="btn btn-primary" 
+                      data-bs-toggle="modal" 
+                      data-bs-target="#submitModal-<?= $asg['id'] ?>"
+                    >
+                      <i class="bi <?= ($status === 'pending') ? 'bi-cloud-arrow-up' : 'bi-pencil-square' ?> me-1"></i>
+                      <?= ($status === 'pending') ? 'Submit Assignment' : 'Update Submission' ?>
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submission Modal -->
+          <div class="modal fade" id="submitModal-<?= $asg['id'] ?>" tabindex="-1" aria-labelledby="modalLabel-<?= $asg['id'] ?>" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content card-custom">
+                <form method="POST" action="<?= url('student/assignments.php') ?>" enctype="multipart/form-data">
+                  <?= csrf_field() ?>
+                  <input type="hidden" name="action" value="submit_assignment">
+                  <input type="hidden" name="assignment_id" value="<?= $asg['id'] ?>">
+
+                  <div class="modal-header border-bottom">
+                    <h5 class="modal-title fw-bold" id="modalLabel-<?= $asg['id'] ?>">
+                      Submit: <?= e($asg['title']) ?>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+
+                  <div class="modal-body">
+                    <div class="mb-3">
+                      <label class="form-label">Submission Notes / Written Answer</label>
+                      <textarea class="form-control" name="submission_notes" rows="4" placeholder="Enter answers, references, or GitHub repository links..."><?= e($asg['submission_notes'] ?? '') ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Upload Solution File (Optional)</label>
+                      <input type="file" class="form-control" name="submission_file">
+                      <div class="form-text small">Allowed formats: PDF, DOCX, TXT, ZIP, CPP (Max 10MB).</div>
+                      <?php if ($asg['submitted_file_name']): ?>
+                        <div class="small text-muted mt-1">
+                          Current uploaded file: <code><?= e($asg['submitted_file_name']) ?></code>
+                        </div>
+                      <?php endif; ?>
+                    </div>
+                  </div>
+
+                  <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                      <i class="bi bi-cloud-arrow-up me-1"></i>Confirm Submission
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        <?php endforeach; ?>
+      <?php endif; ?>
+    </div>
+
+  </main>
+</div>
+
+<?php require_once dirname(__DIR__) . '/includes/footer.php'; ?>
