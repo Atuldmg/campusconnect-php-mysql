@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CampusConnect — Project Presentation Deck</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    @page {
+      size: 16in 9in;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #060913;
+      color: #f1f5f9;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .slide {
+      width: 16in;
+      height: 9in;
+      page-break-after: always;
+      position: relative;
+      background: radial-gradient(circle at 85% 15%, rgba(37, 99, 235, 0.12) 0%, transparent 60%),
+                  radial-gradient(circle at 15% 85%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                  #0a0f1d;
+      padding: 0.9in 1in 0.8in 1in;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      border: 1px solid #1e293b;
+    }
+
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #1e293b;
+      padding-bottom: 0.25in;
+      margin-bottom: 0.35in;
+    }
+
+    .slide-category {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #38bdf8;
+      margin-bottom: 0.08in;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .slide-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .slide-badge {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #334155;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slide-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #1e293b;
+      padding-top: 0.18in;
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 0.2in;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4in;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.3in;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 0.25in;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 0.3in;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-highlight {
+      border-color: #3b82f6;
+      background: rgba(30, 58, 138, 0.18);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 0.12in;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card p, .card li {
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: #cbd5e1;
+    }
+
+    ul.feature-list {
+      list-style: none;
+    }
+
+    ul.feature-list li {
+      position: relative;
+      padding-left: 1.4rem;
+      margin-bottom: 0.12in;
+    }
+
+    ul.feature-list li::before {
+      content: "▹";
+      position: absolute;
+      left: 0;
+      color: #38bdf8;
+      font-weight: bold;
+    }
+
+    .speaker-note-box {
+      background: rgba(15, 23, 42, 0.9);
+      border-left: 4px solid #38bdf8;
+      padding: 0.18in 0.25in;
+      border-radius: 0 8px 8px 0;
+      margin-top: 0.25in;
+    }
+
+    .speaker-note-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #38bdf8;
+      margin-bottom: 0.05in;
+    }
+
+    .speaker-note-text {
+      font-size: 0.85rem;
+      font-style: italic;
+      color: #94a3b8;
+      line-height: 1.45;
+    }
+
+    /* Custom Tables */
+    table.slide-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    table.slide-table th {
+      background: #1e293b;
+      color: #f8fafc;
+      text-align: left;
+      padding: 0.14in 0.2in;
+      font-weight: 700;
+      border-bottom: 2px solid #334155;
+    }
+
+    table.slide-table td {
+      padding: 0.12in 0.2in;
+      border-bottom: 1px solid #1e293b;
+      color: #cbd5e1;
+    }
+
+    table.slide-table tr:nth-child(even) {
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 0.18rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .pill-blue { background: rgba(37, 99, 235, 0.2); color: #60a5fa; border: 1px solid #2563eb; }
+    .pill-green { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #059669; }
+    .pill-amber { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #d97706; }
+    .pill-purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid #9333ea; }
+
+    /* Title Slide Customization */
+    .slide-title-hero {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .hero-tag {
+      background: rgba(37, 99, 235, 0.25);
+      border: 1px solid #3b82f6;
+      color: #60a5fa;
+      padding: 0.4rem 1.1rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.3in;
+    }
+
+    .hero-h1 {
+      font-size: 3.8rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.2in;
+    }
+
+    .hero-sub {
+      font-size: 1.5rem;
+      color: #94a3b8;
+      font-weight: 500;
+      max-width: 12in;
+      line-height: 1.45;
+      margin-bottom: 0.5in;
+    }
+
+    .tech-badges-row {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .tech-pill {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 0.4rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 1: Title Slide -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-title-hero">
+      <div class="hero-tag">Academic Capstone &bull; Advanced Web Technologies (AWT)</div>
+      <h1 class="hero-h1">CampusConnect</h1>
+      <div class="hero-sub">Smart Campus Management System & Academic Workflow Portal</div>
+      <div class="tech-badges-row mb-4">
+        <div class="tech-pill"><span style="color:#60a5fa;">●</span> PHP 8.0+ (PDO)</div>
+        <div class="tech-pill"><span style="color:#34d399;">●</span> MySQL / MariaDB (InnoDB)</div>
+        <div class="tech-pill"><span style="color:#c084fc;">●</span> Bootstrap 5.3.3</div>
+        <div class="tech-pill"><span style="color:#fbbf24;">●</span> Vanilla JavaScript (ES6+)</div>
+        <div class="tech-pill"><span style="color:#38bdf8;">●</span> AJAX (Fetch API)</div>
+        <div class="tech-pill"><span style="color:#f43f5e;">●</span> XML / DTD Validation</div>
+      </div>
+      <div style="font-size: 0.95rem; color: #64748b; margin-top: 0.2in;">
+        Presented by: <strong>Atul Anand</strong> &bull; Department of Computer Applications
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect — Smart Campus Management System</span>
+      <span>Slide 1 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 2: Problem Statement -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Context & Problem Definition</div>
+        <h2 class="slide-title">The Challenge in Modern Campus Operations</h2>
+      </div>
+      <div class="slide-badge">Operational Breakdown</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">📁 Information Fragmentation</div>
+          <p>Lecture slides, circulars, and course schedules are scattered across third-party cloud drives, unvetted chat groups, and physical notice boards, resulting in missed student deadlines and communication gaps.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">⏳ Manual Administrative Burden</div>
+          <p>Submitting assignments and managing deliverables over email causes lost attachments, lacks audit trails, and complicates teacher grading and structured student feedback delivery.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🚫 Zero Concurrency Controls</div>
+          <p>Campus event registrations and grievance handling lack centralized database constraints, resulting in double-bookings, capacity overruns, and unaddressed student issues.</p>
+        </div>
+      </div>
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"In typical collegiate environments, academic resources are fragmented across messaging groups and emails. Faculty members manage submissions manually, which creates huge administrative friction. CampusConnect was engineered to solve this through a unified, database-driven portal."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 2 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 3: Executive Overview -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Project Overview</div>
+        <h2 class="slide-title">CampusConnect: Two Distinct Role-Governed Portals</h2>
+      </div>
+      <div class="slide-badge">System Capabilities</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-2">
+        <div class="card card-highlight">
+          <div class="card-title">👨‍🎓 Student Academic Portal</div>
+          <ul class="feature-list">
+            <li><strong>Personalized Dashboard:</strong> Tracks pending coursework tasks and deadlines.</li>
+            <li><strong>Digital Study Repository:</strong> Asynchronous live search (AJAX Fetch API).</li>
+            <li><strong>Coursework Submission:</strong> Upload solutions (PDF/DOCX/ZIP) & view scores.</li>
+            <li><strong>Campus Event Booking:</strong> One-click symposium registration with duplicate prevention.</li>
+            <li><strong>Grievance Portal:</strong> Submit feedback with character counter & status tracker.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🛡️ Administrator Management Console</div>
+          <ul class="feature-list">
+            <li><strong>Institutional Analytics:</strong> Real-time student counts, study files, and event stats.</li>
+            <li><strong>User Management:</strong> Audit accounts, filter roles, provision users safely.</li>
+            <li><strong>Notice Board Publisher:</strong> Publish, categorize, and pin circulars (CRUD).</li>
+            <li><strong>Assignment & Grading Center:</strong> Review student files, assign scores and feedback.</li>
+            <li><strong>Event Management:</strong> Set venue capacities, view and export attendee rosters.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"CampusConnect is built on strict role-based access control. A student receives a productivity dashboard for their coursework, while an administrator receives an institutional management cockpit with full CRUD over all data."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 3 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 4: Tech Stack Matrix -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Engineering Foundations</div>
+        <h2 class="slide-title">Technology Stack & Architectural Rationale</h2>
+      </div>
+      <div class="slide-badge">Decision Matrix</div>
+    </div>
+    <div class="slide-body">
+      <table class="slide-table">
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Technology Selected</th>
+            <th>Engineering Rationale & Benefit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Frontend UI</strong></td>
+            <td><span class="pill pill-purple">Bootstrap 5.3.3</span></td>
+            <td>Provides clean, responsive, accessible components with zero dependency bloat.</td>
+          </tr>
+          <tr>
+            <td><strong>Client Scripting</strong></td>
+            <td><span class="pill pill-amber">Vanilla JS (ES6+)</span></td>
+            <td>Native Fetch API for instant AJAX search, input debouncing, and DOM manipulation.</td>
+          </tr>
+          <tr>
+            <td><strong>Animation Demo</strong></td>
+            <td><span class="pill pill-amber">jQuery 3.7.1</span></td>
+            <td>Isolated interactive module demonstration satisfying academic syllabus requirements.</td>
+          </tr>
+          <tr>
+            <td><strong>Backend Engine</strong></td>
+            <td><span class="pill pill-blue">PHP 8.0+</span></td>
+            <td>Strong typing, native session encryption, and clean modular include architecture.</td>
+          </tr>
+          <tr>
+            <td><strong>Database Driver</strong></td>
+            <td><span class="pill pill-blue">PHP Data Objects (PDO)</span></td>
+            <td>Enforces 100% parameterized SQL prepared statements to eliminate SQL Injection.</td>
+          </tr>
+          <tr>
+            <td><strong>Database</strong></td>
+            <td><span class="pill pill-green">MySQL / MariaDB (InnoDB)</span></td>
+            <td>Relational integrity with foreign keys (<span class="pill pill-green">ON DELETE CASCADE</span>) and composite constraints.</td>
+          </tr>
+          <tr>
+            <td><strong>Interchange</strong></td>
+            <td><span class="pill pill-purple">XML / DTD Validation</span></td>
+            <td>DOMDocument validates course schemas dynamically before rendering accordions.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"We intentionally avoided bloated Node frameworks to deliver a clean, maintainable PHP 8 and MySQL stack. Using PDO ensures complete immunity against SQL injection, while Bootstrap 5 gives us sub-50ms rendering."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 4 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 5: Architecture & Execution Flow -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">System Architecture</div>
+        <h2 class="slide-title">High-Level Flow & Execution Pipeline</h2>
+      </div>
+      <div class="slide-badge">Flowchart Pipeline</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-4 mb-3">
+        <div class="card text-center">
+          <div style="font-size: 1.5rem; margin-bottom: 0.1in;">🌐</div>
+          <div style="font-weight:700; color:#60a5fa; margin-bottom:0.05in;">1. Client Tier</div>
+          <p style="font-size:0.8rem;">Browser dispatches HTTP navigation or Fetch AJAX queries.</p>
+        </div>
+        <div class="card text-center">
+          <div style="font-size: 1.5rem; margin-bottom: 0.1in;">⚙️</div>
+          <div style="font-weight:700; color:#38bdf8; margin-bottom:0.05in;">2. Apache & PHP 8</div>
+          <p style="font-size:0.8rem;">Gateway enforces CSRF tokens and session role checks (<span class="pill pill-blue">require_role</span>).</p>
+        </div>
+        <div class="card text-center">
+          <div style="font-size: 1.5rem; margin-bottom: 0.1in;">🗄️</div>
+          <div style="font-weight:700; color:#34d399; margin-bottom:0.05in;">3. Dual-Data Tier</div>
+          <p style="font-size:0.8rem;">Prepared PDO queries to MySQL or DOM parsing on XML & DTD.</p>
+        </div>
+        <div class="card text-center">
+          <div style="font-size: 1.5rem; margin-bottom: 0.1in;">📊</div>
+          <div style="font-weight:700; color:#a78bfa; margin-bottom:0.05in;">4. Response Output</div>
+          <p style="font-size:0.8rem;">Renders sanitized HTML views or dispatches JSON payloads.</p>
+        </div>
+      </div>
+
+      <div class="card p-3">
+        <div style="font-size:0.85rem; font-weight:700; color:#38bdf8; margin-bottom:0.05in;">CORE DECISION LOGIC:</div>
+        <p style="font-size:0.82rem; color:#cbd5e1;">Query Execution Status evaluates on server &rarr; On <strong>Success</strong>, renders interactive dashboard or JSON data &rarr; On <strong>Exception</strong>, triggers safe contextual validation alerts (403/422) without exposing database stack traces.</p>
+      </div>
+
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"When a user interacts with CampusConnect, Apache routes requests to the PHP 8 runtime. The backend verifies CSRF tokens and role permissions, queries MySQL via PDO or parses XML via DOMDocument, and dispatches pre-rendered HTML or JSON."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 5 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 6: Frontend Engineering -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">User Interface Tier</div>
+        <h2 class="slide-title">Frontend Engineering & Tri-State Theme Engine</h2>
+      </div>
+      <div class="slide-badge">UI/UX Subsystem</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">☀️ Light Mode</div>
+          <p>Off-white surfaces (<span class="pill pill-blue">#f8fafc</span>), high-contrast charcoal typography (<span class="pill pill-blue">#1e293b</span>), and restrained blue accents. Optimized for well-lit lecture halls.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🌙 Dark Mode</div>
+          <p>Sleek slate and charcoal backgrounds (<span class="pill pill-blue">#0f172a</span>, <span class="pill pill-blue">#1e293b</span>) minimizing eye strain during nighttime study sessions.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🔄 System Auto Mode</div>
+          <p>Dynamically synchronizes with the operating system theme using <span class="pill pill-green">window.matchMedia</span> with instant Cross-Tab synchronization.</p>
+        </div>
+      </div>
+
+      <div class="card mt-3">
+        <div class="card-title">⚡ Zero Flash of Unstyled Theme (FOUC) Solution</div>
+        <p>A lightweight inline script runs synchronously in the HTML <span class="pill pill-amber">&lt;head&gt;</span> before page render, reading <span class="pill pill-purple">localStorage</span> and injecting the theme attribute before the browser paints the DOM, completely preventing white flashes.</p>
+      </div>
+
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"On the frontend, our theme switcher supports true 'System Auto' mode following the user's OS preference. We solved the annoying 'white flash' bug by executing a micro-script in the document head before the browser paints."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 6 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 7: Backend Engineering -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Server Tier</div>
+        <h2 class="slide-title">Backend Architecture: Modular PHP 8 & Sessions</h2>
+      </div>
+      <div class="slide-badge">Core Engine</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">🧩 Modular Project Organization</div>
+          <ul class="feature-list">
+            <li><strong><span class="pill pill-blue">config/</span>:</strong> Centralized PDO database manager with seamless SQLite testing fallback.</li>
+            <li><strong><span class="pill pill-blue">includes/</span>:</strong> Security guards (<span class="pill pill-purple">require_role()</span>), CSRF tokens, and view components.</li>
+            <li><strong><span class="pill pill-blue">api/</span>:</strong> RESTful endpoints returning structured JSON.</li>
+            <li><strong><span class="pill pill-blue">actions/</span>:</strong> Self-contained transactional action handlers.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🔐 Cryptographic Session Lifecycle</div>
+          <ul class="feature-list">
+            <li><strong>Bcrypt Password Hashing:</strong> Utilizes <span class="pill pill-green">password_hash()</span> with salt.</li>
+            <li><strong>Session Fixation Mitigation:</strong> Invokes <span class="pill pill-green">session_regenerate_id(true)</span> immediately upon successful authentication.</li>
+            <li><strong>Cookie Hardening:</strong> <span class="pill pill-blue">HttpOnly</span> and <span class="pill pill-blue">SameSite</span> flags prevent JavaScript access to cookies.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"Our backend follows clean modular PHP conventions. Password authentication relies on Bcrypt hashing, and we immediately regenerate the session ID upon sign-in to neutralize session fixation attacks."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 7 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 8: Relational Database Design -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Persistence Tier</div>
+        <h2 class="slide-title">Relational Database Architecture (MySQL InnoDB)</h2>
+      </div>
+      <div class="slide-badge">Normalized Schema</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-4 mb-3">
+        <div class="card">
+          <div style="font-weight:700; color:#38bdf8;">users</div>
+          <p style="font-size:0.8rem;">Credentials, role, department, roll number.</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:700; color:#38bdf8;">announcements</div>
+          <p style="font-size:0.8rem;">Circulars, categories, priority pinning.</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:700; color:#38bdf8;">resources</div>
+          <p style="font-size:0.8rem;">Study documents, file paths, size, MIME type.</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:700; color:#38bdf8;">assignments</div>
+          <p style="font-size:0.8rem;">Tasks, subjects, deadlines, max marks.</p>
+        </div>
+      </div>
+      <div class="grid-4 mb-3">
+        <div class="card">
+          <div style="font-weight:700; color:#34d399;">assignment_submissions</div>
+          <p style="font-size:0.8rem;">Uploads, notes, status, marks, feedback.</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:700; color:#34d399;">events</div>
+          <p style="font-size:0.8rem;">Symposiums, dates, venues, seat capacity.</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:700; color:#34d399;">event_registrations</div>
+          <p style="font-size:0.8rem;">Junction table linking students to booked events.</p>
+        </div>
+        <div class="card">
+          <div style="font-weight:700; color:#34d399;">feedback</div>
+          <p style="font-size:0.8rem;">Grievances, resolution status, admin remarks.</p>
+        </div>
+      </div>
+
+      <div class="card p-2" style="font-size:0.82rem; color:#cbd5e1;">
+        <strong>RELATIONAL CONSTRAINTS:</strong> Composite unique constraint on <span class="pill pill-green">UNIQUE (event_id, student_id)</span> eliminates duplicate registrations. Cascading foreign keys preserve integrity across deletions.
+      </div>
+
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"Our database features 8 normalized tables with foreign key cascades and composite unique constraints. For instance, in event registrations, duplicate bookings are rejected at the database engine level."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 8 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 9: AJAX & Live Search -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Interactive Client Scripting</div>
+        <h2 class="slide-title">Asynchronous AJAX Search Engine (Fetch API + JSON)</h2>
+      </div>
+      <div class="slide-badge">Real-Time Search</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">🔍 The 3-Step Search Pipeline</div>
+          <ul class="feature-list">
+            <li><strong>1. Keystroke Debounce:</strong> Client listens on <span class="pill pill-amber">input</span> with a 300ms timer to prevent server flooding.</li>
+            <li><strong>2. Fetch API Dispatch:</strong> Asynchronously requests <span class="pill pill-blue">api/search.php?q=Web</span>.</li>
+            <li><strong>3. Dynamic DOM Ingestion:</strong> Injects formatted cards into container in-place with zero page reload.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">📦 Structured JSON Payload</div>
+          <pre style="background:#020617; padding:0.15in; border-radius:6px; color:#38bdf8; font-size:0.75rem; font-family:'JetBrains Mono',monospace;">{
+  "status": "success",
+  "count": 1,
+  "data": [{
+    "id": 1,
+    "title": "AWT Lecture Notes & PDO Guide",
+    "subject": "Web Technology",
+    "formatted_size": "2.4 MB",
+    "time_ago": "5 days ago"
+  }]
+}</pre>
+        </div>
+      </div>
+
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"Rather than reloading the whole page when searching for lecture notes, our JavaScript debounces the keystrokes and queries our JSON endpoint via the Fetch API, updating the results instantly."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 9 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 10: XML & DTD Module -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Data Interoperability</div>
+        <h2 class="slide-title">XML & DTD Curriculum Validation Subsystem</h2>
+      </div>
+      <div class="slide-badge">Schema Validation</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">📄 Document Type Definition (courses.dtd)</div>
+          <ul class="feature-list">
+            <li>Defines rigid structural rules for course cataloging.</li>
+            <li>Enforces nested elements: <span class="pill pill-purple">title</span>, <span class="pill pill-purple">credits</span>, <span class="pill pill-purple">instructor</span>, <span class="pill pill-purple">modules</span>, and <span class="pill pill-purple">prerequisites</span>.</li>
+            <li>Validates attribute requirements like academic year and credit limits.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">⚙️ PHP DOM Parsing Engine (courses.php)</div>
+          <ul class="feature-list">
+            <li><strong>Validation:</strong> Executes <span class="pill pill-green">$dom->validate()</span> ensuring zero schema violations.</li>
+            <li><strong>Transformation:</strong> Uses <span class="pill pill-blue">SimpleXMLElement</span> to extract modules and topics.</li>
+            <li><strong>Display:</strong> Generates interactive Bootstrap accordions displaying module breakdown and teaching hours.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"To demonstrate XML interoperability in our curriculum, we engineered an XML course catalogue validated against a strict DTD schema. PHP's DOMDocument validates the document rules before displaying it."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 10 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 11: Security Engineering -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Application Hardening</div>
+        <h2 class="slide-title">Enterprise Security Architecture (OWASP Protections)</h2>
+      </div>
+      <div class="slide-badge">Defense-in-Depth</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-3 mb-2">
+        <div class="card">
+          <div class="card-title">💉 SQLi Elimination</div>
+          <p><strong>100% Parameterized PDO Statements.</strong> Zero dynamic SQL concatenation ensures user input is strictly treated as query parameters.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🛡️ XSS Defense</div>
+          <p><strong>Contextual HTML Escaping.</strong> All user-supplied output is passed through our <span class="pill pill-green">e()</span> helper utilizing <span class="pill pill-green">htmlspecialchars()</span>.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🎫 CSRF Tokens</div>
+          <p><strong>Cryptographic Session Tokens.</strong> Every state-changing form includes a secure token verified via <span class="pill pill-green">validate_csrf()</span>.</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">🔑 Bcrypt Encryption</div>
+          <p>Passwords stored with cryptographic salt utilizing PHP's <span class="pill pill-blue">password_hash()</span>.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">📁 Path Traversal Guards</div>
+          <p><span class="pill pill-blue">download.php</span> verifies canonical paths via <span class="pill pill-blue">realpath()</span> inside the uploads folder.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🔒 Role Enforcement</div>
+          <p>Server-side access checks (<span class="pill pill-blue">require_role</span>) strictly prevent privilege escalation.</p>
+        </div>
+      </div>
+
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"Security was engineered into the foundation: prepared statements against SQL injection, strict HTML escaping against XSS, cryptographic CSRF tokens, and path traversal guards on file downloads."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 11 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 12: Live Demo Script -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Demonstration Flow</div>
+        <h2 class="slide-title">Step-by-Step Live Demonstration Walkthrough</h2>
+      </div>
+      <div class="slide-badge">Live Evaluation</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">1️⃣ Student Workflow (aarav.sharma@campusconnect.edu)</div>
+          <ul class="feature-list">
+            <li><strong>Login & Personalized Greeting:</strong> Shows roll number, pending tasks, and recent notices.</li>
+            <li><strong>Live AJAX Search:</strong> Search for "Web" lecture slides with zero page refresh.</li>
+            <li><strong>Coursework Submission:</strong> Submit written notes and attach a solution archive.</li>
+            <li><strong>Event Booking:</strong> Book a seat for HackCampus 2026; seat counter updates live.</li>
+            <li><strong>Feedback Submission:</strong> Watch the character counter while submitting an inquiry.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">2️⃣ Administrator Workflow (admin@campusconnect.edu)</div>
+          <ul class="feature-list">
+            <li><strong>Institutional Analytics:</strong> Review student statistics, materials, and pending alerts.</li>
+            <li><strong>Submissions Evaluation:</strong> Inspect Aarav's uploaded solution; enter grade and feedback.</li>
+            <li><strong>Attendee Roster:</strong> View and export the registered participant list for HackCampus.</li>
+            <li><strong>Notice Board Publisher:</strong> Publish a new circular and pin it to the top.</li>
+            <li><strong>Grievance Resolution:</strong> Reply to student feedback; updates status to 'Reviewed'.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"Now I will switch to our live environment. First, I will demonstrate the student journey: live search, assignment upload, and event registration. Then, I will log into the admin console to evaluate submissions and resolve queries."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 12 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 13: QA & Verification -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Testing & Verification</div>
+        <h2 class="slide-title">Quality Assurance & Automated Verification Results</h2>
+      </div>
+      <div class="slide-badge">QA Verification</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">🧪 Automated QA Test Suite (tests/test_suite.php)</div>
+          <ul class="feature-list">
+            <li><span class="pill pill-green">PASS</span> Database PDO Connection</li>
+            <li><span class="pill pill-green">PASS</span> All 8 Required Tables & Constraints Exist</li>
+            <li><span class="pill pill-green">PASS</span> Admin & Student Bcrypt Password Verification</li>
+            <li><span class="pill pill-green">PASS</span> Duplicate Event Registration Constraint Enforcement</li>
+            <li><span class="pill pill-green">PASS</span> CSRF Token Cryptographic Validation</li>
+            <li><span class="pill pill-green">PASS</span> XSS Sanitization Helper e()</li>
+            <li><span class="pill pill-green">PASS</span> XML Course Catalogue & DTD Schema Validation</li>
+            <li><span class="pill pill-green">PASS</span> Study Resource Query Search Execution</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">📊 Static Linting & Browser Results</div>
+          <ul class="feature-list">
+            <li><strong>Zero Syntax Errors:</strong> All 34 PHP files passed <span class="pill pill-blue">php -l</span> linting with 0 warnings.</li>
+            <li><strong>DTD Schema Conformance:</strong> <span class="pill pill-blue">courses.xml</span> confirmed valid against DTD schema.</li>
+            <li><strong>Browser Automation:</strong> Light/Dark theme switching, responsive layouts, and form validations verified end-to-end.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"Before concluding development, we ran our custom automated test suite. Every subsystem—from database constraints and password verification to XML schemas and CSRF defenses—passed with 100% success."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 13 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 14: Syllabus Mapping -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Curriculum Alignment</div>
+        <h2 class="slide-title">Web Development Syllabus Coverage Matrix</h2>
+      </div>
+      <div class="slide-badge">Academic Mapping</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">🎨 HTML5, CSS3 & Bootstrap</div>
+          <p>Semantic landmarks (<span class="pill pill-blue">&lt;header&gt;</span>, <span class="pill pill-blue">&lt;main&gt;</span>, <span class="pill pill-blue">&lt;footer&gt;</span>), responsive grid, CSS variables, Light/Dark/System themes, and an educational marquee sandbox.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">⚡ JavaScript, AJAX & jQuery</div>
+          <p>Native Fetch API, 300ms input debouncing, real-time client validation, character counters, and jQuery <span class="pill pill-amber">.slideToggle()</span> interactive animation.</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🐘 PHP 8, MySQL & XML</div>
+          <p>Role-based sessions, Bcrypt hashing, PDO prepared statements, InnoDB foreign keys with cascading deletions, and XML DTD validation.</p>
+        </div>
+      </div>
+
+      <div class="speaker-note-box mt-3">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"CampusConnect fulfills all objectives of our Web Development syllabus. Every curriculum module—from semantic HTML5 landmarks and CSS tokens to AJAX Fetch requests, XML DTD validation, and PHP PDO transactions—is implemented in real working features."</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 14 / 15</span>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SLIDE 15: Conclusion & Roadmap -->
+  <!-- ======================================================== -->
+  <div class="slide">
+    <div class="slide-header">
+      <div>
+        <div class="slide-category">Summary & Future Scope</div>
+        <h2 class="slide-title">Conclusion, Business Value & Future Roadmap</h2>
+      </div>
+      <div class="slide-badge">Next Milestones</div>
+    </div>
+    <div class="slide-body">
+      <div class="grid-2">
+        <div class="card card-highlight">
+          <div class="card-title">🏆 What CampusConnect Delivers Today</div>
+          <ul class="feature-list">
+            <li><strong>Centralized Hub:</strong> Eliminates information fragmentation across the campus.</li>
+            <li><strong>Zero Artificial Gimmicks:</strong> Real database records, production-grade security, and accessible UI.</li>
+            <li><strong>Portable Deployment:</strong> Instantly runnable on any standard XAMPP environment.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title">🚀 Future Enhancement Roadmap</div>
+          <ul class="feature-list">
+            <li><strong>Email Reminders:</strong> Automated SMTP notifications for pending assignment deadlines.</li>
+            <li><strong>Automated PDF Badges:</strong> Dynamic certificate generation for symposium attendees.</li>
+            <li><strong>Real-Time Messaging:</strong> WebSocket-powered student-to-instructor advisory channels.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="speaker-note-box">
+        <div class="speaker-note-label">🎤 Speaker Note to Leader</div>
+        <div class="speaker-note-text">"In summary, CampusConnect provides a robust, scalable, and secure platform that solves real campus operational challenges. Thank you, and I am now ready to take your questions and demonstrate the code!"</div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>CampusConnect Architecture Deck</span>
+      <span>Slide 15 / 15</span>
+    </div>
+  </div>
+
+</body>
+</html>
