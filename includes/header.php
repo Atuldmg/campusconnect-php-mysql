@@ -70,6 +70,11 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' — CampusConnect' : 'CampusConn
               <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) === 'about.php') ? 'active' : '' ?>" href="<?= url('about.php') ?>">About & Syllabus</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) === 'architecture.php') ? 'active' : '' ?>" href="<?= url('architecture.php') ?>">
+                <i class="bi bi-diagram-3 me-1"></i>Architecture
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link <?= (basename($_SERVER['PHP_SELF']) === 'courses.php') ? 'active' : '' ?>" href="<?= url('courses.php') ?>">
                 <i class="bi bi-filetype-xml me-1"></i>Curriculum (XML)
               </a>

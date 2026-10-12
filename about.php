@@ -37,7 +37,12 @@ require_once __DIR__ . '/includes/header.php';
       
       <!-- Core Architecture Card -->
       <div class="card card-custom p-4 mb-4">
-        <h5 class="fw-bold mb-3"><i class="bi bi-diagram-3-fill text-primary me-2"></i>System Architecture</h5>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0"><i class="bi bi-diagram-3-fill text-primary me-2"></i>System Architecture</h5>
+          <a href="<?= url('architecture.php') ?>" class="btn btn-sm btn-outline-primary">
+            <i class="bi bi-diagram-3 me-1"></i>Visual Architecture Diagrams &rarr;
+          </a>
+        </div>
         <p class="text-muted small">
           CampusConnect is designed using an MVC-inspired modular PHP architecture. It separates presentation layers (reusable PHP partials and Bootstrap components), business logic (authentication guards, validation rules, action handlers), and relational persistence (PDO transactions with MySQL).
         </p>
