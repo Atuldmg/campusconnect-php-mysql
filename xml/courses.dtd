@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CampusConnect - Course Catalogue Document Type Definition (DTD)
+  Validates academic curriculum, course modules, prerequisites, and faculty assignments.
+-->
+
+<!ELEMENT catalogue (university, course+)>
+<!ATTLIST catalogue
+  academic_year CDATA #REQUIRED
+  generated_date CDATA #REQUIRED>
+
+<!ELEMENT university (#PCDATA)>
+
+<!ELEMENT course (title, department, credits, semester, instructor, description, modules, prerequisites)>
+<!ATTLIST course
+  id ID #REQUIRED
+  code CDATA #REQUIRED
+  category (Core|Elective|Lab) "Core">
+
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT department (#PCDATA)>
+<!ELEMENT credits (#PCDATA)>
+<!ELEMENT semester (#PCDATA)>
+
+<!ELEMENT instructor (name, email, office)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT email (#PCDATA)>
+<!ELEMENT office (#PCDATA)>
+
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT modules (module+)>
+<!ELEMENT module (title, topics)>
+<!ATTLIST module
+  number CDATA #REQUIRED
+  hours CDATA #REQUIRED>
+
+<!ELEMENT topics (#PCDATA)>
+
+<!ELEMENT prerequisites (prerequisite*)>
+<!ELEMENT prerequisite (#PCDATA)>

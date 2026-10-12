@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE catalogue SYSTEM "courses.dtd">
+<!--
+  CampusConnect - Official Academic Course Catalogue
+  Validated against courses.dtd
+-->
+<catalogue academic_year="2026-2027" generated_date="2026-10-12">
+  <university>Department of Computer Applications &amp; Information Technology</university>
+
+  <course id="c1" code="BCA-501" category="Core">
+    <title>Advanced Web Technologies</title>
+    <department>Computer Science</department>
+    <credits>4</credits>
+    <semester>Semester 5</semester>
+    <instructor>
+      <name>Prof. Rajesh Varma</name>
+      <email>r.varma@campusconnect.edu</email>
+      <office>Room 304, IT Block</office>
+    </instructor>
+    <description>In-depth exploration of full-stack web application engineering using HTML5, CSS3, modern JavaScript, PHP 8 object-oriented paradigms, PDO transactions, and relational database systems.</description>
+    <modules>
+      <module number="1" hours="12">
+        <title>HTML5 Semantics, Responsive Layouts &amp; Bootstrap 5</title>
+        <topics>Document structure, semantic landmarks, responsive containers, CSS custom properties, accessibility guidelines.</topics>
+      </module>
+      <module number="2" hours="14">
+        <title>JavaScript, DOM Manipulation &amp; Asynchronous AJAX</title>
+        <topics>DOM traversals, client validation, event loop, Fetch API, JSON serialization, and jQuery integration.</topics>
+      </module>
+      <module number="3" hours="16">
+        <title>PHP 8 Backend &amp; Secure PDO MySQL Integration</title>
+        <topics>Session mechanics, password hashing algorithms, prepared statements, CSRF tokens, file upload verification.</topics>
+      </module>
+      <module number="4" hours="10">
+        <title>XML, DTD &amp; Web Data Exchange</title>
+        <topics>XML document tree, DTD syntax, DOMDocument parser, SimpleXML, and schema validation.</topics>
+      </module>
+    </modules>
+    <prerequisites>
+      <prerequisite>BCA-201: Web Basics &amp; Scripting</prerequisite>
+      <prerequisite>BCA-302: Database Management Fundamentals</prerequisite>
+    </prerequisites>
+  </course>
+
+  <course id="c2" code="BCA-502" category="Core">
+    <title>Relational Database Engineering</title>
+    <department>Computer Science</department>
+    <credits>4</credits>
+    <semester>Semester 5</semester>
+    <instructor>
+      <name>Dr. Sunita Deshmukh</name>
+      <email>s.deshmukh@campusconnect.edu</email>
+      <office>Room 210, Science Complex</office>
+    </instructor>
+    <description>Advanced principles of relational database architectures, multi-table joins, subqueries, normalization theories, indexing strategies, and transaction isolation.</description>
+    <modules>
+      <module number="1" hours="10">
+        <title>Relational Algebra &amp; Schema Design</title>
+        <topics>Entity-relationship modelling, keys, constraints, functional dependencies, 1NF to BCNF.</topics>
+      </module>
+      <module number="2" hours="12">
+        <title>Advanced SQL Query Optimization</title>
+        <topics>Complex joins, correlated subqueries, window functions, views, and query execution plans.</topics>
+      </module>
+      <module number="3" hours="14">
+        <title>Indexing Mechanisms &amp; Storage</title>
+        <topics>B-tree vs Hash indexing, clustered indexes, full-text indexes, and table partitioning.</topics>
+      </module>
+      <module number="4" hours="12">
+        <title>ACID Transactions &amp; Concurrency Control</title>
+        <topics>Two-phase locking, timestamp ordering, deadlocks, WAL logging, and crash recovery.</topics>
+      </module>
+    </modules>
+    <prerequisites>
+      <prerequisite>BCA-302: Database Management Fundamentals</prerequisite>
+    </prerequisites>
+  </course>
+
+  <course id="c3" code="BCA-301" category="Core">
+    <title>Data Structures &amp; Algorithms</title>
+    <department>Computer Science</department>
+    <credits>4</credits>
+    <semester>Semester 3</semester>
+    <instructor>
+      <name>Prof. Amit Sengupta</name>
+      <email>a.sengupta@campusconnect.edu</email>
+      <office>Room 112, IT Block</office>
+    </instructor>
+    <description>Fundamental abstract data types, memory representations, algorithmic efficiency, tree traversal algorithms, and graph networks.</description>
+    <modules>
+      <module number="1" hours="12">
+        <title>Linear Data Structures</title>
+        <topics>Dynamic arrays, singly and doubly linked lists, stacks, queues, and priority queues.</topics>
+      </module>
+      <module number="2" hours="14">
+        <title>Non-Linear Structures: Trees</title>
+        <topics>Binary search trees, AVL self-balancing trees, red-black trees, heap structures.</topics>
+      </module>
+      <module number="3" hours="12">
+        <title>Graph Algorithms</title>
+        <topics>Adjacency lists, Breadth-First Search, Depth-First Search, Dijkstra shortest path.</topics>
+      </module>
+      <module number="4" hours="10">
+        <title>Asymptotic Complexity &amp; Sorting</title>
+        <topics>Big-O notation, merge sort, quick sort, and algorithm analysis techniques.</topics>
+      </module>
+    </modules>
+    <prerequisites>
+      <prerequisite>BCA-102: Structured Programming with C</prerequisite>
+    </prerequisites>
+  </course>
+
+  <course id="c4" code="BCA-402" category="Core">
+    <title>Computer Networks &amp; Information Security</title>
+    <department>Information Technology</department>
+    <credits>3</credits>
+    <semester>Semester 4</semester>
+    <instructor>
+      <name>Dr. Kavita Nair</name>
+      <email>k.nair@campusconnect.edu</email>
+      <office>Room 401, IT Block</office>
+    </instructor>
+    <description>Network architectures, OSI layered models, TCP/IP handshakes, routing protocols, cryptography, and network vulnerability mitigation.</description>
+    <modules>
+      <module number="1" hours="10">
+        <title>Physical &amp; Data Link Layers</title>
+        <topics>Transmission media, MAC framing, CSMA/CD, Ethernet standards, error detection.</topics>
+      </module>
+      <module number="2" hours="12">
+        <title>Network &amp; Transport Layers</title>
+        <topics>IPv4 and IPv6 addressing, subnet masking, distance vector routing, TCP three-way handshake, UDP.</topics>
+      </module>
+      <module number="3" hours="12">
+        <title>Application Layer Protocols</title>
+        <topics>HTTP/HTTPS, DNS resolution, SMTP, FTP, and socket communication concepts.</topics>
+      </module>
+      <module number="4" hours="10">
+        <title>Information Security Essentials</title>
+        <topics>Symmetric vs asymmetric encryption, TLS certificates, firewalls, and defense in depth.</topics>
+      </module>
+    </modules>
+    <prerequisites>
+      <prerequisite>BCA-204: Computer Architecture &amp; Organization</prerequisite>
+    </prerequisites>
+  </course>
+</catalogue>

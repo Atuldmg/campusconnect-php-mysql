@@ -1,0 +1,25 @@
+# Operating System Artifacts
+.DS_Store
+Thumbs.db
+
+# Local Configuration & Secrets
+config/local.php
+.env
+*.env.local
+
+# Local SQLite Test Databases & Logs
+*.sqlite
+*.sqlite3
+*.log
+
+# Sensitive or Temporary User Uploads (keep directory structure)
+uploads/resources/*
+!uploads/resources/.gitkeep
+uploads/submissions/*
+!uploads/submissions/.gitkeep
+
+# IDE & Editor Configurations
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
