@@ -87,9 +87,78 @@ CampusConnect unifies campus operations into a secure, intuitive, and responsive
 
 ---
 
-## System Architecture & Folder Structure
+## System Architecture & Execution Flow
 
-CampusConnect follows a clean modular PHP architecture with strict separation of presentation partials, business logic, and database access:
+The CampusConnect portfolio architecture is engineered for dual-mode execution: instantaneous static asset delivery via optimized Apache web servers, and modular server-side processing powered by PHP 8.x PDO, XML DOM/DTD parsing, and MySQL relational backends.
+
+### High-Level Flow
+
+```mermaid
+flowchart TD
+    Browser(["Evaluator / Client Browser"]):::client
+    Gateway["Frontend Hub & Apache Web Server"]:::gateway
+    PHP["PHP 8.x Runtime Engine\n(Session, Auth & Validation)"]:::engine
+    Status{"Query Execution\nStatus?"}:::decision
+    Success["Render Interactive\nScorecard & Data Grid"]:::success
+    Error["Trigger Inline Validation\n& Error Alert"]:::error
+    
+    XML[("XML Data Store:\n courses.xml & courses.dtd")]:::xmlStore
+    MySQL[("MySQL Database:\n campusconnect (InnoDB)")]:::sqlStore
+
+    Browser -->|"HTTP Navigation"| Gateway
+    Gateway -->|"POST / GET Request"| PHP
+    
+    PHP -->|"XPath Query & DOM"| XML
+    XML -.->|"Parsed Subject Trees"| PHP
+    
+    PHP -->|"Prepared SQL Query"| MySQL
+    MySQL -.->|"Resultset & RowCount"| PHP
+    
+    PHP --> Status
+    Status -->|"Success"| Success
+    Status -->|"Error"| Error
+    
+    Success -->|"Response Payload"| Gateway
+    Error -->|"Response Payload"| Gateway
+    Gateway -->|"Render to Viewport"| Browser
+
+    classDef client fill:#2563eb,stroke:#60a5fa,stroke-width:2px,color:#ffffff;
+    classDef gateway fill:#1e293b,stroke:#475569,stroke-width:1px,color:#f8fafc;
+    classDef engine fill:#1e293b,stroke:#3b82f6,stroke-width:2px,color:#f8fafc;
+    classDef decision fill:#1e293b,stroke:#94a3b8,stroke-width:2px,color:#f8fafc;
+    classDef success fill:#059669,stroke:#34d399,stroke-width:2px,color:#ffffff;
+    classDef error fill:#dc2626,stroke:#f87171,stroke-width:2px,color:#ffffff;
+    classDef xmlStore fill:#1e293b,stroke:#eab308,stroke-width:1px,color:#f8fafc;
+    classDef sqlStore fill:#1e293b,stroke:#06b6d4,stroke-width:1px,color:#f8fafc;
+```
+
+### Component & Execution Flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Frontend as Frontend
+    participant PHP as PHP Backend
+    participant XML as XML Data
+    participant DB as MySQL Database
+
+    Note over Frontend, DB: 1. Student Course Lookup & Scorecard
+    Frontend->>PHP: POST student_lookup.php { enrollment_no: "2024BCAR001" }
+    PHP->>XML: simplexml_load_file("students.xml") -> xpath query
+    XML-->>PHP: Student Record: Aarav Sharma [88, 92, 79, 95, 84]
+    PHP->>PHP: computeTotal(438/500) & computePercentage(87.6%)
+    PHP-->>Frontend: { status: 200, scorecard_html, grade: "Distinction" }
+    Frontend->>Frontend: UI Transition to Scorecard State
+
+    Note over Frontend, DB: 2. Relational Transactional Mutation
+    Frontend->>PHP: POST mysql_crud_demo.php { action: "UPDATE", id: 101 }
+    PHP->>DB: PDO prepare & execute("UPDATE employees SET salary = ?")
+    DB-->>PHP: { affected_rows: 1, status: "OK" }
+    PHP-->>Frontend: { status: 200, records: [...], notice: "Record Updated" }
+    Frontend->>Frontend: UI Transition to Updated Data Grid
+```
+
+### Folder Structure
 
 ```
 Final-AWT-Project/
