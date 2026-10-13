@@ -6,7 +6,7 @@
 ### Slide 1: Title Slide
 - **Title:** CampusConnect — Smart Campus Management System
 - **Subtitle:** Centralized Academic Portal & Role-Based Institutional Operations Engine
-- **Presenter:** [Your Name / Team Name]
+- **Presenter:** [ Atul Anand ]
 - **Course / Project Context:** Advanced Web Technologies (AWT) / Full-Stack Web Development Capstone
 - **Tech Stack Snapshot:** PHP 8 (PDO) &bull; MySQL / MariaDB &bull; Bootstrap 5 &bull; Vanilla JS &bull; AJAX &bull; XML/DTD
 
