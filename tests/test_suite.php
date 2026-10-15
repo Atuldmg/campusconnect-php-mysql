@@ -113,5 +113,39 @@ assert_test("XSS Sanitization Helper e()", $escaped === '&lt;script&gt;alert(&qu
 // TEST 7: XML Well-Formedness & DTD Schema Validation
 // -----------------------------------------------------------
 try {
-    echo 'Security tests passed.\n';
-?>
+    $xmlPath = dirname(__DIR__) . '/xml/courses.xml';
+    $dom = new DOMDocument();
+    $dom->resolveExternals = true;
+    libxml_use_internal_errors(true);
+    $xmlLoaded = $dom->load($xmlPath);
+    $dtdValid = $dom->validate();
+    libxml_clear_errors();
+
+    assert_test("XML Course Catalogue & DTD Schema Validation", $xmlLoaded && $dtdValid);
+} catch (Exception $e) {
+    assert_test("XML Course Catalogue & DTD Schema Validation", false, $e->getMessage());
+}
+
+// -----------------------------------------------------------
+// TEST 8: Live Search Query Logic
+// -----------------------------------------------------------
+try {
+    $q = 'Web';
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM resources WHERE title LIKE ? OR description LIKE ?");
+    $stmt->execute(['%' . $q . '%', '%' . $q . '%']);
+    $count = (int)$stmt->fetchColumn();
+    assert_test("Study Resource Query Search Execution", $count >= 1);
+} catch (Exception $e) {
+    assert_test("Study Resource Query Search Execution", false, $e->getMessage());
+}
+
+// -----------------------------------------------------------
+// SUMMARY
+// -----------------------------------------------------------
+echo "\n========================================================\n";
+echo " Test Suite Finished: {$passed} Passed, {$failed} Failed\n";
+echo "========================================================\n";
+
+if ($failed > 0) {
+    exit(1);
+}
