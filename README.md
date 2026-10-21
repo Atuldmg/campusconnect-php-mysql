@@ -358,3 +358,112 @@ Pre-seeded accounts are provided for testing and evaluation viva demonstrations:
 | **Administrator** | `admin@campusconnect.edu` | `AdminPassword123!` | System Administrator (Full access) |
 | **Student** | `aarav.sharma@campusconnect.edu` | `StudentPass123!` | BCA Semester 5 &bull; Roll: `CC-2023-BCA-001` |
 | **Student** | `priya.patel@campusconnect.edu` | `StudentPass123!` | BCA Semester 5 &bull; Roll: `CC-2023-BCA-002` |
+| **Student** | `rohan.verma@campusconnect.edu` | `StudentPass123!` | B.Sc IT Semester 3 &bull; Roll: `CC-2024-IT-015` |
+
+*(Passphrases are hashed with Bcrypt via `password_hash()`).*
+
+---
+
+## CLI Administrator Provisioning Tool
+
+To create a brand-new administrator account securely via terminal:
+
+```bash
+# Interactive mode:
+php scripts/create_admin.php
+
+# Direct arguments:
+php scripts/create_admin.php "Prof. Vikram Malhotra" "v.malhotra@campusconnect.edu" "SecureAdmin2026!"
+```
+
+---
+
+## Web Development Syllabus Coverage Checklist
+
+| Syllabus Topic | Concept Demonstrated | File Reference |
+| :--- | :--- | :--- |
+| **HTML5 Semantic Elements** | `<header>`, `<nav>`, `<main>`, `<section>`, `<aside>`, `<footer>`, `<figure>` | `includes/header.php`, `includes/footer.php`, `index.php` |
+| **Forms & Input Elements** | Text, email, password, file, select, textarea, checkbox, `datetime-local` | `register.php`, `student/assignments.php`, `admin/resources.php` |
+| **Tables & Data Display** | Responsive Bootstrap data tables with captions and striped rows | `admin/users.php`, `student/dashboard.php` |
+| **Legacy HTML Tag Sandbox** | Educational demo of syllabus `<marquee>` tag in an isolated container | `about.php` |
+| **CSS3 Custom Properties** | Theme variables for body bg, card bg, borders, text color, primary accents | `assets/css/style.css` |
+| **Dark / Light / System Mode** | Native `data-bs-theme`, OS `prefers-color-scheme`, `localStorage` persistence | `assets/js/app.js`, `includes/header.php` |
+| **Bootstrap 5 Components** | Navbar, cards, modals, badges, dropdowns, alerts, responsive grid | Throughout all public and portal views |
+| **JavaScript & DOM** | Event listeners (`click`, `input`, `change`, `blur`), password view toggle | `assets/js/app.js`, `assets/js/validation.js` |
+| **Form Validation** | Real-time client-side checks and server-side validation with feedback | `assets/js/validation.js`, `register.php` |
+| **AJAX (Fetch API)** | Asynchronous live study material search with debouncing | `assets/js/search.js`, `student/resources.php` |
+| **JSON API** | RESTful JSON endpoints returning status, counts, and formatted arrays | `api/search.php`, `api/announcements.php` |
+| **jQuery Demonstration** | `$(document).ready()`, element selector, `.slideToggle()` module notes animation | `about.php` |
+| **XML & DTD** | Well-formed course catalogue with Document Type Definition schema | `xml/courses.xml`, `xml/courses.dtd` |
+| **PHP XML Parsing** | Safe `DOMDocument` validation (`->validate()`) and `SimpleXMLElement` rendering | `courses.php` |
+| **PHP Sessions & Auth** | `session_regenerate_id(true)`, role authorization guards (`require_role`) | `includes/auth.php` |
+| **Security & Hashing** | Bcrypt `password_hash()` and `password_verify()` | `register.php`, `login.php`, `scripts/create_admin.php` |
+| **CSRF Defense** | Cryptographic session token generation and verification on POST requests | `includes/csrf.php` |
+| **XSS Mitigation** | Contextual HTML sanitization helper function `e()` | `includes/functions.php` |
+| **Relational MySQL & PDO** | Parameterized queries, foreign keys (`ON DELETE CASCADE`), unique keys | `database/campusconnect.sql`, `config/database.php` |
+
+---
+
+## Application Security Safeguards
+
+1. **SQL Injection Defense:** All queries utilize PDO prepared statements with parameter binding. User input is never concatenated into raw SQL.
+2. **Password Hashing:** Passwords are hashed using the Bcrypt algorithm via `password_hash($pass, PASSWORD_BCRYPT)`.
+3. **Cross-Site Scripting (XSS):** All dynamic database content is escaped through the `e()` helper function (`htmlspecialchars(..., ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')`).
+4. **Cross-Site Request Forgery (CSRF):** Every state-changing form includes a cryptographically secure token (`csrf_field()`) validated on the server via `validate_csrf()`.
+5. **Session Fixation Prevention:** Session IDs are regenerated upon successful authentication via `session_regenerate_id(true)`.
+6. **Role-Based Access Control:** Role checks (`require_role('admin')` / `require_role('student')`) run on the server before rendering protected views.
+7. **Directory Traversal Protection:** File downloads in `download.php` verify the canonical path via `realpath()` and confirm it resides strictly inside the `uploads/` directory.
+8. **Upload Restrictions:** File uploads enforce strict file-size limits (10MB–15MB) and allowlists for extensions (`pdf`, `docx`, `pptx`, `txt`, `zip`).
+
+---
+
+## Testing & Quality Assurance Results
+
+The project was validated using both automated test suites and interactive browser walkthroughs:
+
+```
+========================================================
+   CampusConnect Automated Test & Verification Suite    
+========================================================
+
+ [PASS] Database PDO Connection
+ [PASS] All 8 Required Database Tables Exist
+ [PASS] Admin Seed Account & Bcrypt Password
+ [PASS] Student Seed Account & Bcrypt Password
+ [PASS] Duplicate Event Registration Prevention (Unique Constraint)
+ [PASS] CSRF Token Cryptographic Validation
+ [PASS] XSS Sanitization Helper e()
+ [PASS] XML Course Catalogue & DTD Schema Validation
+ [PASS] Study Resource Query Search Execution
+
+========================================================
+ Test Suite Finished: 9 Passed, 0 Failed
+========================================================
+```
+
+- **PHP Syntax:** All 34 `.php` files passed `php -l` linting with 0 syntax errors.
+- **DTD Schema:** `xml/courses.xml` passed validation against `xml/courses.dtd` via `DOMDocument::validate()`.
+- **Browser Automation:** Tested and verified light/dark/system theme switching, student login, live AJAX search, assignment submission, event registration, and administrator dashboards.
+
+To re-run the automated verification suite at any time:
+```bash
+php tests/test_suite.php
+```
+
+---
+
+## Known Limitations & Future Roadmap
+
+### Current Scope & Deliberate Choices
+- **Authentication Model:** CampusConnect utilizes session-based authentication designed for local collegiate demonstration. Single Sign-On (SSO) via SAML or LDAP is not implemented.
+- **File Storage:** Uploaded lecture materials and assignments are stored on the local filesystem (`uploads/`) with database path tracking, suitable for standard XAMPP environments rather than cloud object storage (e.g., AWS S3).
+- **Public Admin Registration:** As mandated by security best practices, public administrator registration is disabled; administrators can only be created via the CLI script (`scripts/create_admin.php`) or by an existing admin.
+
+### Future Roadmap
+- Integration with campus email gateways (PHPMailer / SMTP) for automated deadline reminder alerts.
+- PDF generation for attendance and event ticket badges using TCPDF or FPDF.
+- Real-time student-to-instructor messaging using WebSockets.
+
+---
+
+**CampusConnect** — Developed for Academic Demonstration & Portfolio Showcase.
