@@ -166,12 +166,14 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
 
-    <!-- Primary Row: Assignment Deadlines & Notice Board (Fit on Screen) -->
-    <div class="row g-3 mb-3">
+    <!-- Main Content Grid -->
+    <div class="row g-3">
       
-      <!-- Left: Course Assignments Table -->
-      <div class="col-12 col-xl-7">
-        <div class="card card-custom h-100 shadow-none border">
+      <!-- Left Column: Assignment Deadlines & Quick Action Shortcuts -->
+      <div class="col-12 col-xl-7 d-flex flex-column gap-3">
+        
+        <!-- Assignment Deadlines -->
+        <div class="card card-custom shadow-none border">
           <div class="card-header-clean py-2 px-3">
             <span class="text-body fw-bold"><i class="bi bi-journal-text text-primary me-2"></i>Assignment Deadlines</span>
             <a href="<?= url('student/assignments.php') ?>" class="small text-primary text-decoration-none">View All</a>
@@ -233,67 +235,69 @@ require_once dirname(__DIR__) . '/includes/header.php';
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Right: Notice Board (Fit on Screen Alongside Assignments) -->
-      <div class="col-12 col-xl-5" id="notice-board-card">
-        <div class="card card-custom h-100 shadow-none border">
-          <div class="card-header-clean py-2 px-3">
-            <div class="d-flex align-items-center gap-2">
-              <span class="text-body fw-bold"><i class="bi bi-bell-fill text-primary me-2"></i>Notice Board</span>
-              <span class="badge bg-primary-subtle text-primary py-0.5 px-2" style="font-size: 0.72rem;">Circulars</span>
-            </div>
-            <span class="small text-muted"><?= count($recentAnnouncements) ?> Available</span>
+        <!-- Quick Actions Shortcuts -->
+        <div class="card card-custom p-3 shadow-none border bg-body-tertiary">
+          <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+            <span class="fw-bold small text-body"><i class="bi bi-lightning-charge text-warning me-1.5"></i>Quick Actions</span>
+            <span class="small text-muted" style="font-size: 0.75rem;">Shortcuts</span>
           </div>
-          <div class="card-body p-3 notice-scroll-container">
-            <?php if (empty($recentAnnouncements)): ?>
-              <div class="text-center py-4 text-muted small">No announcements posted.</div>
-            <?php else: ?>
-              <div class="d-flex flex-column gap-2">
-                <?php foreach ($recentAnnouncements as $ann): ?>
-                  <div class="p-2 border rounded-2 bg-body-tertiary <?= $ann['is_pinned'] ? 'border-primary-subtle bg-primary-subtle bg-opacity-10' : '' ?>">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                      <div class="d-flex align-items-center gap-1">
-                        <span class="badge <?= category_badge_class($ann['category']) ?>" style="font-size: 0.68rem;"><?= e($ann['category']) ?></span>
-                        <?php if ($ann['is_pinned']): ?>
-                          <span class="badge bg-warning-subtle text-warning-emphasis" style="font-size: 0.68rem;"><i class="bi bi-pin-angle-fill me-1"></i>Pinned</span>
-                        <?php endif; ?>
-                      </div>
-                      <small class="text-muted" style="font-size: 0.72rem;"><i class="bi bi-clock me-1"></i><?= time_ago($ann['created_at']) ?></small>
-                    </div>
-                    <div class="fw-bold text-body small mb-1"><?= e($ann['title']) ?></div>
-                    <p class="text-muted small mb-0 line-clamp-2" style="font-size: 0.8rem; line-height: 1.35;"><?= e($ann['content']) ?></p>
-                  </div>
-                <?php endforeach; ?>
-              </div>
-            <?php endif; ?>
+          <div class="row g-2">
+            <div class="col-6 col-sm-3">
+              <a href="<?= url('student/resources.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-center py-2 d-flex flex-column align-items-center gap-1">
+                <i class="bi bi-search text-primary fs-6"></i>
+                <span style="font-size: 0.75rem;">Search Notes</span>
+              </a>
+            </div>
+            <div class="col-6 col-sm-3">
+              <a href="<?= url('student/events.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-center py-2 d-flex flex-column align-items-center gap-1">
+                <i class="bi bi-calendar-plus text-success fs-6"></i>
+                <span style="font-size: 0.75rem;">Events</span>
+              </a>
+            </div>
+            <div class="col-6 col-sm-3">
+              <a href="<?= url('student/feedback.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-center py-2 d-flex flex-column align-items-center gap-1">
+                <i class="bi bi-chat-quote text-info fs-6"></i>
+                <span style="font-size: 0.75rem;">Feedback</span>
+              </a>
+            </div>
+            <div class="col-6 col-sm-3">
+              <a href="<?= url('courses.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-center py-2 d-flex flex-column align-items-center gap-1">
+                <i class="bi bi-filetype-xml text-danger fs-6"></i>
+                <span style="font-size: 0.75rem;">Course XML</span>
+              </a>
+            </div>
+          </div>
+          <div class="mt-2.5 pt-2 border-top text-muted d-flex justify-content-between align-items-center" style="font-size: 0.75rem;">
+            <span>Need assistance? Contact department coordinator</span>
+            <a href="<?= url('student/feedback.php') ?>" class="text-primary text-decoration-none">Help Desk &rarr;</a>
           </div>
         </div>
+
       </div>
 
-    </div>
-
-    <!-- Secondary Row: Recent Resources & Quick Action Shortcuts -->
-    <div class="row g-3">
-      
-      <!-- Left: Recent Study Materials -->
-      <div class="col-12 col-xl-7">
-        <div class="card card-custom h-100 shadow-none border">
+      <!-- Right Column: Study Files (Top) & Notice Board (Placed at the Bottom of Study Files) -->
+      <div class="col-12 col-xl-5 d-flex flex-column gap-3">
+        
+        <!-- Top: Study Files (Recently Added Study Resources) -->
+        <div class="card card-custom shadow-none border">
           <div class="card-header-clean py-2 px-3">
-            <span class="text-body fw-bold"><i class="bi bi-file-earmark-arrow-down text-primary me-2"></i>Recently Added Study Resources</span>
+            <span class="text-body fw-bold">
+              <i class="bi bi-folder2-open text-primary me-2"></i>Study Files
+            </span>
             <a href="<?= url('student/resources.php') ?>" class="small text-primary text-decoration-none">Browse All</a>
           </div>
-          <div class="card-body p-3">
+          <div class="card-body p-2.5">
             <?php if (empty($recentResources)): ?>
-              <div class="text-center py-4 text-muted small">No resources available.</div>
+              <div class="text-center py-3 text-muted small">No study files available.</div>
             <?php else: ?>
               <div class="d-flex flex-column gap-2">
-                <?php foreach ($recentResources as $res): ?>
+                <?php foreach (array_slice($recentResources, 0, 3) as $res): ?>
                   <div class="d-flex justify-content-between align-items-center p-2 border rounded bg-body-tertiary">
                     <div class="me-2 text-truncate">
                       <div class="fw-bold text-body small text-truncate"><?= e($res['title']) ?></div>
-                      <div class="text-muted" style="font-size: 0.75rem;">
-                        <span class="badge bg-primary-subtle text-primary me-1 py-0 px-1" style="font-size: 0.68rem;"><?= e($res['subject']) ?></span>
+                      <div class="text-muted" style="font-size: 0.73rem;">
+                        <span class="badge bg-primary-subtle text-primary me-1 py-0 px-1"><?= e($res['subject']) ?></span>
                         <?= format_bytes((int)$res['file_size']) ?> &bull; <?= time_ago($res['created_at']) ?>
                       </div>
                     </div>
@@ -306,40 +310,43 @@ require_once dirname(__DIR__) . '/includes/header.php';
             <?php endif; ?>
           </div>
         </div>
-      </div>
 
-      <!-- Right: Quick Actions -->
-      <div class="col-12 col-xl-5">
-        <div class="card card-custom h-100 p-3 shadow-none border bg-body-tertiary">
-          <h6 class="fw-bold mb-2 small"><i class="bi bi-lightning-charge text-warning me-2"></i>Quick Actions</h6>
-          <div class="row g-2">
-            <div class="col-6">
-              <a href="<?= url('student/resources.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-start py-2 d-flex align-items-center gap-1.5">
-                <i class="bi bi-search text-primary"></i><span class="small text-truncate">Search Notes</span>
-              </a>
+        <!-- Bottom: Notice Board (Directly at the Bottom of Study Files) -->
+        <div class="card card-custom shadow-none border" id="notice-board-card">
+          <div class="card-header-clean py-2 px-3">
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-body fw-bold">
+                <i class="bi bi-bell-fill text-primary me-2"></i>Notice Board
+              </span>
+              <span class="badge bg-primary-subtle text-primary py-0.5 px-2" style="font-size: 0.7rem;">Circulars</span>
             </div>
-            <div class="col-6">
-              <a href="<?= url('student/events.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-start py-2 d-flex align-items-center gap-1.5">
-                <i class="bi bi-calendar-plus text-success"></i><span class="small text-truncate">Campus Events</span>
-              </a>
-            </div>
-            <div class="col-6">
-              <a href="<?= url('student/feedback.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-start py-2 d-flex align-items-center gap-1.5">
-                <i class="bi bi-chat-quote text-info"></i><span class="small text-truncate">Send Feedback</span>
-              </a>
-            </div>
-            <div class="col-6">
-              <a href="<?= url('courses.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-start py-2 d-flex align-items-center gap-1.5">
-                <i class="bi bi-filetype-xml text-danger"></i><span class="small text-truncate">Course XML</span>
-              </a>
-            </div>
+            <span class="small text-muted" style="font-size: 0.75rem;"><?= count($recentAnnouncements) ?> Active</span>
           </div>
-
-          <div class="mt-2.5 pt-2 border-top text-muted d-flex justify-content-between align-items-center" style="font-size: 0.75rem;">
-            <span>Need help? Contact coordinator</span>
-            <a href="<?= url('student/feedback.php') ?>" class="text-primary text-decoration-none">Help Desk &rarr;</a>
+          <div class="card-body p-2.5 notice-scroll-container" style="max-height: 230px; overflow-y: auto;">
+            <?php if (empty($recentAnnouncements)): ?>
+              <div class="text-center py-3 text-muted small">No announcements posted.</div>
+            <?php else: ?>
+              <div class="d-flex flex-column gap-2">
+                <?php foreach ($recentAnnouncements as $ann): ?>
+                  <div class="p-2 border rounded bg-body-tertiary <?= $ann['is_pinned'] ? 'border-primary-subtle bg-primary-subtle bg-opacity-10' : '' ?>">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <div class="d-flex align-items-center gap-1">
+                        <span class="badge <?= category_badge_class($ann['category']) ?>" style="font-size: 0.68rem;"><?= e($ann['category']) ?></span>
+                        <?php if ($ann['is_pinned']): ?>
+                          <span class="badge bg-warning-subtle text-warning-emphasis" style="font-size: 0.68rem;"><i class="bi bi-pin-angle-fill me-1"></i>Pinned</span>
+                        <?php endif; ?>
+                      </div>
+                      <small class="text-muted" style="font-size: 0.72rem;"><i class="bi bi-clock me-1"></i><?= time_ago($ann['created_at']) ?></small>
+                    </div>
+                    <div class="fw-bold text-body small mb-1"><?= e($ann['title']) ?></div>
+                    <p class="text-muted small mb-0 line-clamp-2" style="font-size: 0.78rem; line-height: 1.35;"><?= e($ann['content']) ?></p>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
+
       </div>
 
     </div>
