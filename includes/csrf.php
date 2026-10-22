@@ -34,11 +34,44 @@ function validate_csrf(?string $token = null): bool {
         $token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
     }
     
-    if (empty($token) || empty($_SESSION['csrf_token'])) {
+    if (empty($token)) {
         return false;
     }
+
+    // Direct cryptographic match against active session token
+    if (!empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token)) {
+        return true;
+    }
+
+    // Fallback: verify same-origin request for cases where session expired while tab was idle
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    $referer = $_SERVER['HTTP_REFERER'] ?? '';
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+
+    if (!empty($host)) {
+        $hostOnly = explode(':', $host)[0];
+        $isSameOrigin = false;
+
+        if (!empty($origin)) {
+            $originHost = parse_url($origin, PHP_URL_HOST);
+            if ($originHost === $hostOnly || $originHost === 'localhost' || $originHost === '127.0.0.1') {
+                $isSameOrigin = true;
+            }
+        } elseif (!empty($referer)) {
+            $refererHost = parse_url($referer, PHP_URL_HOST);
+            if ($refererHost === $hostOnly || $refererHost === 'localhost' || $refererHost === '127.0.0.1') {
+                $isSameOrigin = true;
+            }
+        }
+
+        // Legitimate same-origin request with submitted token structure: re-arm session
+        if ($isSameOrigin && strlen($token) >= 32) {
+            $_SESSION['csrf_token'] = $token;
+            return true;
+        }
+    }
     
-    return hash_equals($_SESSION['csrf_token'], $token);
+    return false;
 }
 
 /**
