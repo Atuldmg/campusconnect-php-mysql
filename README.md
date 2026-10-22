@@ -54,7 +54,7 @@ CampusConnect unifies campus operations into a secure, intuitive, and responsive
 - **Tri-State Theme Switcher:** Smooth toggling between **Light Mode**, **Dark Mode** (charcoal/slate theme), and **System Auto Mode** (following OS `prefers-color-scheme`) with `localStorage` persistence and zero theme flashing (FOUC).
 
 ### Student Portal
-- **Personalized Student Dashboard:** Academic metrics, enrollment summary, upcoming deadlines, and recent announcements.
+- **Personalized Student Dashboard:** Responsive multi-column layout with academic metrics, assignment deadlines, quick action shortcuts, study files library, and integrated notice board circulars.
 - **Study Resource Library:** Asynchronous live search (AJAX Fetch API) with subject filtering and authenticated document downloads.
 - **Assignment Submissions:** Detailed problem briefs, due date countdowns, status badges (Pending, Submitted, Graded), file upload support (PDF, DOCX, ZIP), and teacher score/feedback reviews.
 - **Campus Event Booking:** One-click symposium registration with duplicate prevention constraints and real-time seat availability.
