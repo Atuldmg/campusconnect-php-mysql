@@ -20,12 +20,12 @@ $error = '';
 $email = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = strtolower(trim($_POST['email'] ?? ''));
+    $password = $_POST['password'] ?? '';
+
     if (!validate_csrf()) {
         $error = 'Session security token expired. Please try again.';
     } else {
-        $email = trim($_POST['email'] ?? '');
-        $password = $_POST['password'] ?? '';
-
         if (empty($email) || empty($password)) {
             $error = 'Please enter both your email address and password.';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             try {
                 $pdo = get_db_connection();
-                $stmt = $pdo->prepare("SELECT id, name, email, password_hash, role, department, roll_number FROM users WHERE email = ? LIMIT 1");
+                $stmt = $pdo->prepare("SELECT id, name, email, password_hash, role, department, roll_number FROM users WHERE LOWER(email) = ? LIMIT 1");
                 $stmt->execute([$email]);
                 $user = $stmt->fetch();
 
@@ -116,16 +116,41 @@ require_once __DIR__ . '/includes/header.php';
 
         <!-- Demonstration Credentials Notice (Essential for College Viva Demo) -->
         <div class="mt-4 p-3 bg-body-tertiary border rounded small">
-          <div class="fw-bold mb-1 text-body"><i class="bi bi-info-circle me-1"></i>Demo Accounts for Evaluation:</div>
-          <div class="d-flex justify-content-between text-muted mb-1">
-            <span><strong>Admin:</strong> admin@campusconnect.edu</span>
-            <code>AdminPassword123!</code>
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="fw-bold text-body"><i class="bi bi-info-circle me-1"></i>Demo Accounts for Evaluation:</span>
+            <span class="text-muted" style="font-size: 0.72rem;">Click to auto-fill</span>
           </div>
-          <div class="d-flex justify-content-between text-muted">
-            <span><strong>Student:</strong> aarav.sharma@campusconnect.edu</span>
-            <code>StudentPass123!</code>
+          <div class="d-flex justify-content-between align-items-center p-2 mb-2 rounded border bg-body" style="cursor: pointer;" onclick="fillCredentials('admin@campusconnect.edu', 'AdminPassword123!')">
+            <div>
+              <div class="fw-bold text-body" style="font-size: 0.82rem;"><span class="badge bg-danger-subtle text-danger me-1">Admin</span> admin@campusconnect.edu</div>
+              <small class="text-muted" style="font-size: 0.72rem;">Password: <code>AdminPassword123!</code></small>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-danger py-0.5 px-2" style="font-size: 0.72rem;" tabindex="-1">
+              Fill Admin <i class="bi bi-arrow-right-short"></i>
+            </button>
+          </div>
+          <div class="d-flex justify-content-between align-items-center p-2 rounded border bg-body" style="cursor: pointer;" onclick="fillCredentials('aarav.sharma@campusconnect.edu', 'StudentPass123!')">
+            <div>
+              <div class="fw-bold text-body" style="font-size: 0.82rem;"><span class="badge bg-primary-subtle text-primary me-1">Student</span> aarav.sharma@campusconnect.edu</div>
+              <small class="text-muted" style="font-size: 0.72rem;">Password: <code>StudentPass123!</code></small>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-primary py-0.5 px-2" style="font-size: 0.72rem;" tabindex="-1">
+              Fill Student <i class="bi bi-arrow-right-short"></i>
+            </button>
           </div>
         </div>
+
+        <script>
+          function fillCredentials(email, password) {
+            const emailInput = document.getElementById('email');
+            const passInput = document.getElementById('password');
+            if (emailInput && passInput) {
+              emailInput.value = email;
+              passInput.value = password;
+              emailInput.focus();
+            }
+          }
+        </script>
 
       </div>
     </div>
