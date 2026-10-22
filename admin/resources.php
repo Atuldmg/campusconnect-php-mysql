@@ -1,7 +1,4 @@
 <?php
-/**
- * CampusConnect - Study Resource Library Administration (CRUD)
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -14,7 +11,6 @@ $adminId = (int)$_SESSION['user_id'];
 $pageTitle = 'Manage Study Resources';
 $error = '';
 
-// Handle actions (Upload, Update, Delete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validate_csrf()) {
         $error = 'Security session expired. Please refresh and try again.';
@@ -35,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = 'Please select a valid document file to upload.';
                 } else {
                     $file = $_FILES['resource_file'];
-                    $maxBytes = 15 * 1024 * 1024; // 15MB
+                    $maxBytes = 15 * 1024 * 1024;
 
                     if ($file['size'] > $maxBytes) {
                         $error = 'The uploaded file exceeds the 15MB limit.';
@@ -98,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $res = $stmtSelect->fetch();
 
                     if ($res) {
-                        // Delete file on disk if exists
+
                         $diskPath = dirname(__DIR__) . '/' . ltrim($res['file_path'], '/');
                         if (file_exists($diskPath)) {
                             @unlink($diskPath);
@@ -119,7 +115,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch all resources
 $resources = [];
 try {
     $pdo = get_db_connection();
@@ -136,7 +131,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/admin_sidebar.php'; ?>
 
   <main class="portal-content">
-    
+
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
       <div>
         <h4 class="fw-bold mb-1">Study Resource Management</h4>
@@ -155,7 +150,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     <?php endif; ?>
 
-    <!-- Resources Table -->
     <div class="card card-custom shadow-none border">
       <div class="card-header-clean">
         <span class="text-body"><i class="bi bi-folder-fill text-primary me-2"></i>Resource Catalog</span>
@@ -212,7 +206,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
                     </td>
                   </tr>
 
-                  <!-- Edit Resource Modal -->
                   <div class="modal fade" id="editResModal-<?= $res['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content card-custom">
@@ -263,7 +256,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </main>
 </div>
 
-<!-- Upload Resource Modal -->
 <div class="modal fade" id="uploadResourceModal" tabindex="-1" aria-labelledby="uploadResourceModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content card-custom">

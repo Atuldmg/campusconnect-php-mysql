@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - User & Student Administration
- * View, filter, provision, update, and manage student and administrator accounts.
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -15,7 +11,6 @@ $currentAdminId = (int)$_SESSION['user_id'];
 $pageTitle = 'Manage Users';
 $error = '';
 
-// Handle actions (Create, Update Role, Delete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validate_csrf()) {
         $error = 'Security session expired. Please refresh and try again.';
@@ -79,7 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch users with filters
 $roleFilter = trim($_GET['role'] ?? '');
 $searchQuery = trim($_GET['q'] ?? '');
 
@@ -117,7 +111,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/admin_sidebar.php'; ?>
 
   <main class="portal-content">
-    
+
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
       <div>
         <h4 class="fw-bold mb-1">User & Student Management</h4>
@@ -136,7 +130,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     <?php endif; ?>
 
-    <!-- Search & Filter Filterbar -->
     <div class="card card-custom p-3 mb-4 shadow-none border">
       <form method="GET" action="<?= url('admin/users.php') ?>" class="row g-2 align-items-center">
         <div class="col-12 col-md-7">
@@ -163,7 +156,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </form>
     </div>
 
-    <!-- Users Table -->
     <div class="card card-custom shadow-none border">
       <div class="card-header-clean">
         <span class="text-body"><i class="bi bi-people-fill text-primary me-2"></i>Accounts Roster</span>
@@ -234,7 +226,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </main>
 </div>
 
-<!-- Add User Modal -->
 <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content card-custom">

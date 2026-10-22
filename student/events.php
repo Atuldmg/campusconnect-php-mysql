@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - Campus Events & Registration Portal
- * Allows students to browse upcoming activities, register, and manage bookings.
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -15,7 +11,6 @@ $studentId = (int)$_SESSION['user_id'];
 $pageTitle = 'Campus Events';
 $error = '';
 
-// Handle event registration / cancellation POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validate_csrf()) {
         $error = 'Security session expired. Please refresh and try again.';
@@ -30,18 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pdo = get_db_connection();
 
                 if ($action === 'register') {
-                    // Check if already registered
+
                     $checkStmt = $pdo->prepare("SELECT id FROM event_registrations WHERE event_id = ? AND student_id = ?");
                     $checkStmt->execute([$eventId, $studentId]);
                     if ($checkStmt->fetch()) {
                         set_flash('info', 'You are already registered for this event.');
                     } else {
-                        // Check event capacity
+
                         $capStmt = $pdo->prepare("
-                            SELECT e.capacity, COUNT(r.id) as reg_count, e.title 
-                            FROM events e 
-                            LEFT JOIN event_registrations r ON e.id = r.event_id 
-                            WHERE e.id = ? 
+                            SELECT e.capacity, COUNT(r.id) as reg_count, e.title
+                            FROM events e
+                            LEFT JOIN event_registrations r ON e.id = r.event_id
+                            WHERE e.id = ?
                             GROUP BY e.id
                         ");
                         $capStmt->execute([$eventId]);
@@ -72,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch all events with registration count and current student status
 $events = [];
 try {
     $pdo = get_db_connection();
@@ -99,7 +93,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/student_sidebar.php'; ?>
 
   <main class="portal-content">
-    
+
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h4 class="fw-bold mb-1">Campus Events & Symposiums</h4>
@@ -127,7 +121,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
       <?php else: ?>
         <?php foreach ($events as $evt): ?>
-          <?php 
+          <?php
             $isPast = strtotime($evt['event_date']) < time();
             $isRegistered = (bool)$evt['is_registered'];
             $isFull = (int)$evt['total_registered'] >= (int)$evt['capacity'];

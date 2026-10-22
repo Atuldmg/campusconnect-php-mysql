@@ -1,7 +1,4 @@
 <?php
-/**
- * CampusConnect - Event Registration Action Endpoint
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -35,7 +32,7 @@ try {
     $pdo = get_db_connection();
 
     if ($action === 'register') {
-        // Enforce uniqueness
+
         $checkStmt = $pdo->prepare("SELECT id FROM event_registrations WHERE event_id = ? AND student_id = ?");
         $checkStmt->execute([$eventId, $studentId]);
         if ($checkStmt->fetch()) {

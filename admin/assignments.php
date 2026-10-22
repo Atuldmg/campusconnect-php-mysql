@@ -1,7 +1,4 @@
 <?php
-/**
- * CampusConnect - Assignments & Submissions Administration (CRUD & Grading)
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -14,7 +11,6 @@ $adminId = (int)$_SESSION['user_id'];
 $pageTitle = 'Manage Assignments';
 $error = '';
 
-// Handle actions (Create, Edit, Delete, Grade)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validate_csrf()) {
         $error = 'Security session expired. Please refresh and try again.';
@@ -55,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = 'All required fields must be supplied.';
                 } else {
                     $stmt = $pdo->prepare("
-                        UPDATE assignments 
+                        UPDATE assignments
                         SET title = ?, subject = ?, description = ?, due_date = ?, max_marks = ?
                         WHERE id = ?
                     ");
@@ -82,8 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = 'Grade score is required.';
                 } else {
                     $stmt = $pdo->prepare("
-                        UPDATE assignment_submissions 
-                        SET grade = ?, feedback = ?, status = 'graded', updated_at = NOW() 
+                        UPDATE assignment_submissions
+                        SET grade = ?, feedback = ?, status = 'graded', updated_at = NOW()
                         WHERE id = ?
                     ");
                     $stmt->execute([$grade, $feedback, $submissionId]);
@@ -99,7 +95,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch all assignments with submission count
 $assignments = [];
 try {
     $pdo = get_db_connection();
@@ -117,7 +112,6 @@ try {
     error_log('Fetch assignments error: ' . $e->getMessage());
 }
 
-// If viewing submissions for a specific assignment
 $viewAssignmentId = (int)($_GET['view_submissions'] ?? 0);
 $submissions = [];
 $viewAssignment = null;
@@ -153,7 +147,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/admin_sidebar.php'; ?>
 
   <main class="portal-content">
-    
+
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
       <div>
         <h4 class="fw-bold mb-1">Assignment & Examination Management</h4>
@@ -172,7 +166,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     <?php endif; ?>
 
-    <!-- Submissions Detail Sub-view (if triggered) -->
     <?php if ($viewAssignment): ?>
       <div class="card card-custom mb-4 shadow-none border border-primary">
         <div class="card-header-clean bg-primary-subtle">
@@ -236,7 +229,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
                       </td>
                     </tr>
 
-                    <!-- Grade Modal -->
                     <div class="modal fade" id="gradeModal-<?= $sub['id'] ?>" tabindex="-1" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content card-custom">
@@ -281,7 +273,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     <?php endif; ?>
 
-    <!-- Master Assignments Table -->
     <div class="card card-custom shadow-none border">
       <div class="card-header-clean">
         <span class="text-body"><i class="bi bi-journal-text text-primary me-2"></i>Assignments Roster</span>
@@ -338,7 +329,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
                     </td>
                   </tr>
 
-                  <!-- Edit Assignment Modal -->
                   <div class="modal fade" id="editAsgModal-<?= $asg['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content card-custom">
@@ -400,7 +390,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </main>
 </div>
 
-<!-- Create Assignment Modal -->
 <div class="modal fade" id="createAsgModal" tabindex="-1" aria-labelledby="createAsgModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content card-custom">

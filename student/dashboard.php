@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - Student Dashboard
- * Personalized hub displaying academic deadlines, resources, registered events, and circulars.
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -13,7 +9,6 @@ require_role('student');
 $studentId = (int)$_SESSION['user_id'];
 $pageTitle = 'Student Dashboard';
 
-// Metrics and list data
 $stats = [
     'resources'   => 0,
     'pending_asg' => 0,
@@ -27,12 +22,10 @@ $recentAnnouncements = [];
 try {
     $pdo = get_db_connection();
 
-    // 1. Total available resources
     $stats['resources'] = (int)$pdo->query("SELECT COUNT(*) FROM resources")->fetchColumn();
 
-    // 2. Pending assignments (assignments where due_date >= NOW() and not yet submitted by student)
     $stmtPending = $pdo->prepare("
-        SELECT COUNT(*) 
+        SELECT COUNT(*)
         FROM assignments a
         WHERE a.due_date >= NOW()
         AND a.id NOT IN (
@@ -42,15 +35,12 @@ try {
     $stmtPending->execute([$studentId]);
     $stats['pending_asg'] = (int)$stmtPending->fetchColumn();
 
-    // 3. Registered events
     $stmtRegEvt = $pdo->prepare("SELECT COUNT(*) FROM event_registrations WHERE student_id = ?");
     $stmtRegEvt->execute([$studentId]);
     $stats['events_reg'] = (int)$stmtRegEvt->fetchColumn();
 
-    // 4. Total announcements
     $stats['announcements'] = (int)$pdo->query("SELECT COUNT(*) FROM announcements")->fetchColumn();
 
-    // Upcoming assignments with submission status
     $stmtAsg = $pdo->prepare("
         SELECT a.id, a.title, a.subject, a.due_date, a.max_marks,
                s.status as submission_status, s.grade
@@ -62,20 +52,18 @@ try {
     $stmtAsg->execute([$studentId]);
     $upcomingDeadlines = $stmtAsg->fetchAll();
 
-    // Recent resources
     $stmtRes = $pdo->query("
-        SELECT id, title, subject, file_name, file_size, created_at 
-        FROM resources 
-        ORDER BY created_at DESC 
+        SELECT id, title, subject, file_name, file_size, created_at
+        FROM resources
+        ORDER BY created_at DESC
         LIMIT 4
     ");
     $recentResources = $stmtRes->fetchAll();
 
-    // Recent announcements
     $stmtAnn = $pdo->query("
-        SELECT id, title, content, category, is_pinned, created_at 
-        FROM announcements 
-        ORDER BY is_pinned DESC, created_at DESC 
+        SELECT id, title, content, category, is_pinned, created_at
+        FROM announcements
+        ORDER BY is_pinned DESC, created_at DESC
         LIMIT 3
     ");
     $recentAnnouncements = $stmtAnn->fetchAll();
@@ -88,14 +76,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
 ?>
 
 <div class="portal-container">
-  
-  <!-- Left Sidebar Navigation -->
+
   <?php require_once dirname(__DIR__) . '/includes/student_sidebar.php'; ?>
 
-  <!-- Main Content Area -->
   <main class="portal-content">
-    
-    <!-- Welcome Header & Profile Summary -->
+
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
       <div>
         <h4 class="fw-bold mb-1">Welcome back, <?= e($_SESSION['user_name']) ?>!</h4>
@@ -111,7 +96,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
 
-    <!-- 4 Key Statistic Cards (Responsive & Fit to Screen) -->
     <div class="row g-3 mb-3">
       <div class="col-6 col-lg-3">
         <a href="<?= url('student/resources.php') ?>" class="stat-card">
@@ -166,13 +150,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
 
-    <!-- Main Content Grid -->
     <div class="row g-3">
-      
-      <!-- Left Column: Assignment Deadlines & Quick Action Shortcuts -->
+
       <div class="col-12 col-xl-7 d-flex flex-column gap-3">
-        
-        <!-- Assignment Deadlines -->
+
         <div class="card card-custom shadow-none border">
           <div class="card-header-clean py-2 px-3">
             <span class="text-body fw-bold"><i class="bi bi-journal-text text-primary me-2"></i>Assignment Deadlines</span>
@@ -196,7 +177,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
                     </tr>
                   <?php else: ?>
                     <?php foreach ($upcomingDeadlines as $asg): ?>
-                      <?php 
+                      <?php
                         $isOverdue = strtotime($asg['due_date']) < time();
                         $status = $asg['submission_status'] ?? 'pending';
                       ?>
@@ -236,7 +217,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
           </div>
         </div>
 
-        <!-- Quick Actions Shortcuts -->
         <div class="card card-custom p-3 shadow-none border bg-body-tertiary">
           <div class="d-flex justify-content-between align-items-center mb-2 px-1">
             <span class="fw-bold small text-body"><i class="bi bi-lightning-charge text-warning me-1.5"></i>Quick Actions</span>
@@ -276,10 +256,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
 
       </div>
 
-      <!-- Right Column: Study Files (Top) & Notice Board (Placed at the Bottom of Study Files) -->
       <div class="col-12 col-xl-5 d-flex flex-column gap-3">
-        
-        <!-- Top: Study Files (Recently Added Study Resources) -->
+
         <div class="card card-custom shadow-none border">
           <div class="card-header-clean py-2 px-3">
             <span class="text-body fw-bold">
@@ -311,7 +289,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
           </div>
         </div>
 
-        <!-- Bottom: Notice Board (Directly at the Bottom of Study Files) -->
         <div class="card card-custom shadow-none border" id="notice-board-card">
           <div class="card-header-clean py-2 px-3">
             <div class="d-flex align-items-center gap-2">

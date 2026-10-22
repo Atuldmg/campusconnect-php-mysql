@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - AJAX Search API Endpoint
- * Returns JSON-formatted search results for study resources.
- */
 
 header('Content-Type: application/json; charset=utf-8');
 

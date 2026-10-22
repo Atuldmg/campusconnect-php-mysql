@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE catalogue SYSTEM "courses.dtd">
-<!--
-  CampusConnect - Official Academic Course Catalogue
-  Validated against courses.dtd
--->
+
 <catalogue academic_year="2026-2027" generated_date="2026-10-12">
   <university>Department of Computer Applications &amp; Information Technology</university>
 

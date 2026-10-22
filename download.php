@@ -1,14 +1,9 @@
 <?php
-/**
- * CampusConnect - Secure File Download Handler
- * Prevents unauthorized downloads and directory traversal exploits.
- */
 
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/auth.php';
 
-// Enforce authentication
 if (!is_logged_in()) {
     set_flash('warning', 'Please sign in to download course materials.');
     header('Location: ' . url('login.php'));
@@ -34,7 +29,6 @@ try {
     $relativePath = $resource['file_path'];
     $fullPath = __DIR__ . '/' . ltrim($relativePath, '/');
 
-    // Security: Check directory traversal
     $realFullPath = realpath($fullPath);
     $uploadDir = realpath(__DIR__ . '/uploads');
 
@@ -43,7 +37,6 @@ try {
         die('The physical file is currently unavailable on the campus server.');
     }
 
-    // Set download headers
     $downloadFileName = basename($resource['file_name']);
     $contentType = $resource['file_type'] ?: 'application/octet-stream';
 
@@ -55,7 +48,6 @@ try {
     header('Pragma: public');
     header('Content-Length: ' . filesize($realFullPath));
 
-    // Clear output buffer and stream file
     if (ob_get_level()) {
         ob_end_clean();
     }

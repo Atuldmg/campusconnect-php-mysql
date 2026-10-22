@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - Administrator Master Dashboard
- * Administrative metrics, recent student registrations, grievance overview, and system analytics.
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -27,18 +23,15 @@ $recentRegistrations = [];
 try {
     $pdo = get_db_connection();
 
-    // 1. Core database statistics
     $stats['students']     = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'student'")->fetchColumn();
     $stats['resources']    = (int)$pdo->query("SELECT COUNT(*) FROM resources")->fetchColumn();
     $stats['assignments']  = (int)$pdo->query("SELECT COUNT(*) FROM assignments")->fetchColumn();
     $stats['events']       = (int)$pdo->query("SELECT COUNT(*) FROM events")->fetchColumn();
     $stats['new_feedback'] = (int)$pdo->query("SELECT COUNT(*) FROM feedback WHERE status = 'new'")->fetchColumn();
 
-    // 2. Recent student registrations
     $stmtUsers = $pdo->query("SELECT id, name, email, department, roll_number, created_at FROM users WHERE role = 'student' ORDER BY created_at DESC LIMIT 5");
     $recentUsers = $stmtUsers->fetchAll();
 
-    // 3. Recent student feedback
     $stmtFb = $pdo->query("
         SELECT f.id, f.subject, f.category, f.status, f.created_at, u.name as student_name
         FROM feedback f
@@ -48,7 +41,6 @@ try {
     ");
     $recentFeedback = $stmtFb->fetchAll();
 
-    // 4. Recent event sign-ups
     $stmtReg = $pdo->query("
         SELECT r.registered_at, u.name as student_name, e.title as event_title
         FROM event_registrations r
@@ -70,8 +62,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/admin_sidebar.php'; ?>
 
   <main class="portal-content">
-    
-    <!-- Top Greeting -->
+
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
       <div>
         <h4 class="fw-bold mb-1">Administrator Control Panel</h4>
@@ -87,7 +78,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
 
-    <!-- 5 Stat Cards Grid -->
     <div class="row g-3 mb-4">
       <div class="col-6 col-md-4 col-xl">
         <div class="stat-card">
@@ -155,10 +145,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
 
-    <!-- Main Activity Row -->
     <div class="row g-4">
-      
-      <!-- Recent Students Table -->
+
       <div class="col-12 col-xl-7">
         <div class="card card-custom h-100 shadow-none border">
           <div class="card-header-clean">
@@ -201,10 +189,8 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
       </div>
 
-      <!-- Right Column: Recent Registrations & Feedback -->
       <div class="col-12 col-xl-5">
-        
-        <!-- Recent Feedback -->
+
         <div class="card card-custom mb-4 shadow-none border">
           <div class="card-header-clean">
             <span class="text-body"><i class="bi bi-chat-quote text-primary me-2"></i>Recent Inquiries</span>
@@ -236,7 +222,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
           </div>
         </div>
 
-        <!-- Recent Event Registrations -->
         <div class="card card-custom shadow-none border">
           <div class="card-header-clean">
             <span class="text-body"><i class="bi bi-calendar-check text-primary me-2"></i>Recent Event Registrations</span>

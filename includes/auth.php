@@ -1,21 +1,11 @@
 <?php
-/**
- * CampusConnect - Authentication & Authorization Subsystem
- * Handles session protection, role verification, and login state management.
- */
 
 require_once __DIR__ . '/functions.php';
 
-/**
- * Check if a user is currently authenticated
- */
 function is_logged_in(): bool {
     return !empty($_SESSION['user_id']) && !empty($_SESSION['user_role']);
 }
 
-/**
- * Get current authenticated user details from session
- */
 function get_logged_in_user(): ?array {
     if (!is_logged_in()) {
         return null;
@@ -30,16 +20,10 @@ function get_logged_in_user(): ?array {
     ];
 }
 
-/**
- * Check if the current user has a specific role
- */
 function has_role(string $role): bool {
     return is_logged_in() && ($_SESSION['user_role'] === $role);
 }
 
-/**
- * Enforce authentication requirement on protected routes
- */
 function require_login(): void {
     if (!is_logged_in()) {
         set_flash('warning', 'Please log in to access this portal page.');
@@ -48,14 +32,11 @@ function require_login(): void {
     }
 }
 
-/**
- * Enforce specific role requirement on role-restricted routes
- */
 function require_role(string $role): void {
     require_login();
     if ($_SESSION['user_role'] !== $role) {
         http_response_code(403);
-        // Show clean unauthorized page
+
         require_once __DIR__ . '/header.php';
         echo '<div class="container py-5 text-center">
             <div class="card shadow-sm border-danger p-4 mx-auto" style="max-width: 500px;">
@@ -70,11 +51,8 @@ function require_role(string $role): void {
     }
 }
 
-/**
- * Authorize user and establish session with ID regeneration
- */
 function login_user(array $user): void {
-    // Regenerate session ID to prevent session fixation attacks
+
     session_regenerate_id(true);
 
     $_SESSION['user_id']          = (int)$user['id'];
@@ -86,9 +64,6 @@ function login_user(array $user): void {
     $_SESSION['logged_in_time']   = time();
 }
 
-/**
- * Terminate user session completely
- */
 function logout_user(): void {
     $_SESSION = [];
 

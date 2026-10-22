@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  CampusConnect - Course Catalogue Document Type Definition (DTD)
-  Validates academic curriculum, course modules, prerequisites, and faculty assignments.
--->
 
 <!ELEMENT catalogue (university, course+)>
 <!ATTLIST catalogue

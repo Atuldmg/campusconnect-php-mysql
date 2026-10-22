@@ -1,7 +1,4 @@
 <?php
-/**
- * CampusConnect - Announcements Administration (CRUD)
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -14,7 +11,6 @@ $adminId = (int)$_SESSION['user_id'];
 $pageTitle = 'Manage Announcements';
 $error = '';
 
-// Handle actions (Create, Edit, Delete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validate_csrf()) {
         $error = 'Security session expired. Please refresh and try again.';
@@ -72,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch announcements
 $announcements = [];
 try {
     $pdo = get_db_connection();
@@ -94,7 +89,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/admin_sidebar.php'; ?>
 
   <main class="portal-content">
-    
+
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
       <div>
         <h4 class="fw-bold mb-1">Campus Announcements & Circulars</h4>
@@ -113,7 +108,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     <?php endif; ?>
 
-    <!-- Announcements Roster -->
     <div class="card card-custom shadow-none border">
       <div class="card-header-clean">
         <span class="text-body"><i class="bi bi-bell-fill text-primary me-2"></i>Published Notices</span>
@@ -156,11 +150,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
                     <td><small class="text-muted"><?= time_ago($ann['created_at']) ?></small></td>
                     <td class="text-end">
                       <div class="d-inline-flex gap-1">
-                        <!-- Edit Button -->
+
                         <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editModal-<?= $ann['id'] ?>">
                           <i class="bi bi-pencil"></i>
                         </button>
-                        <!-- Delete Form -->
+
                         <form method="POST" action="<?= url('admin/announcements.php') ?>" class="d-inline">
                           <?= csrf_field() ?>
                           <input type="hidden" name="action" value="delete_announcement">
@@ -173,7 +167,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
                     </td>
                   </tr>
 
-                  <!-- Edit Modal -->
                   <div class="modal fade" id="editModal-<?= $ann['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content card-custom">
@@ -234,7 +227,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </main>
 </div>
 
-<!-- Create Announcement Modal -->
 <div class="modal fade" id="createAnnModal" tabindex="-1" aria-labelledby="createAnnModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content card-custom">

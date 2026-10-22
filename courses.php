@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - XML Course Catalogue Explorer
- * Parses and validates courses.xml against courses.dtd using DOMDocument & SimpleXML.
- */
 
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/auth.php';
@@ -17,18 +13,17 @@ $universityName = '';
 $xmlParseError = '';
 
 if (file_exists($xmlFilePath)) {
-    // Validate with DOMDocument
+
     $dom = new DOMDocument();
-    // Prevent external entity injection (XXE safe)
+
     $dom->resolveExternals = true;
     libxml_use_internal_errors(true);
-    
+
     if ($dom->load($xmlFilePath)) {
         if ($dom->validate()) {
             $dtdValidationStatus = true;
         }
 
-        // Convert to SimpleXMLElement for straightforward template traversal
         $xml = simplexml_import_dom($dom);
         if ($xml) {
             $academicYear = (string)$xml['academic_year'];
@@ -81,8 +76,7 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
 <div class="container-fluid px-3 px-lg-4 py-4">
-  
-  <!-- Header Banner -->
+
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
     <div>
       <h3 class="fw-bold mb-1">Academic Curriculum & Course Catalogue</h3>
@@ -100,7 +94,6 @@ require_once __DIR__ . '/includes/header.php';
     </div>
   </div>
 
-  <!-- DTD Validation Status Badge Bar -->
   <div class="card card-custom p-3 mb-4 bg-body-tertiary">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
       <div class="d-flex align-items-center gap-2">
@@ -122,7 +115,6 @@ require_once __DIR__ . '/includes/header.php';
     </div>
   </div>
 
-  <!-- Courses Grid -->
   <div class="row g-4">
     <?php foreach ($coursesList as $course): ?>
       <div class="col-12 col-lg-6">
@@ -151,7 +143,6 @@ require_once __DIR__ . '/includes/header.php';
               </div>
             </div>
 
-            <!-- Course Modules Accordion -->
             <div class="accordion accordion-flush border rounded" id="accordion-<?= e($course['id']) ?>">
               <div class="accordion-item">
                 <h2 class="accordion-header">

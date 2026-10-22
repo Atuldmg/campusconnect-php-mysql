@@ -1,15 +1,6 @@
-/**
- * CampusConnect - Client-Side Application Scripts
- * Manages theme mode switching (Light/Dark/System), password visibility,
- * interactive confirmations, and UI helpers.
- */
-
 (function () {
   'use strict';
 
-  // ==========================================================
-  // THEME MANAGEMENT (System, Light, Dark)
-  // ==========================================================
   const THEME_STORAGE_KEY = 'campusconnect_theme';
 
   function getStoredTheme() {
@@ -57,12 +48,10 @@
     }
   }
 
-  // Initialize theme on DOM ready
   document.addEventListener('DOMContentLoaded', () => {
     const currentTheme = getStoredTheme();
     applyTheme(currentTheme);
 
-    // Theme selector click bindings
     document.querySelectorAll('[data-theme-value]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -72,23 +61,18 @@
       });
     });
 
-    // Listen to OS system theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
       if (getStoredTheme() === 'system') {
         applyTheme('system');
       }
     });
 
-    // Listen to storage events from other tabs
     window.addEventListener('storage', (e) => {
       if (e.key === THEME_STORAGE_KEY) {
         applyTheme(e.newValue || 'system');
       }
     });
 
-    // ==========================================================
-    // PASSWORD VISIBILITY TOGGLE
-    // ==========================================================
     document.querySelectorAll('.password-toggle-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const targetId = btn.getAttribute('data-target');
@@ -112,9 +96,6 @@
       });
     });
 
-    // ==========================================================
-    // DELETE / DESTRUCTIVE CONFIRMATION MODALS
-    // ==========================================================
     document.querySelectorAll('[data-confirm]').forEach(el => {
       el.addEventListener('click', (e) => {
         const msg = el.getAttribute('data-confirm') || 'Are you sure you want to perform this action?';
@@ -124,9 +105,6 @@
       });
     });
 
-    // ==========================================================
-    // CHARACTER COUNTER (e.g. for feedback message)
-    // ==========================================================
     const charCounterInputs = document.querySelectorAll('[data-char-count]');
     charCounterInputs.forEach(input => {
       const targetId = input.getAttribute('data-char-count');
@@ -144,7 +122,6 @@
       updateCount();
     });
 
-    // Auto-dismiss alert banners after 6 seconds
     const autoAlerts = document.querySelectorAll('.alert-dismissible');
     autoAlerts.forEach(alert => {
       setTimeout(() => {
@@ -156,7 +133,6 @@
     });
   });
 
-  // Global Toast Notification Helper
   window.showToast = function (message, type = 'info') {
     let container = document.getElementById('toast-container');
     if (!container) {

@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - Student Assignments & Submissions
- * Displays deadlines, submission status, grade evaluations, and handles assignment upload/submission.
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -16,7 +12,6 @@ $pageTitle = 'My Course Assignments';
 $error = '';
 $success = '';
 
-// Handle assignment submission POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'submit_assignment') {
     if (!validate_csrf()) {
         $error = 'Session security token expired. Please reload and try again.';
@@ -30,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             try {
                 $pdo = get_db_connection();
 
-                // Verify assignment exists
                 $stmtCheck = $pdo->prepare("SELECT id, title, due_date FROM assignments WHERE id = ?");
                 $stmtCheck->execute([$assignmentId]);
                 $asg = $stmtCheck->fetch();
@@ -41,10 +35,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     $uploadedFilePath = null;
                     $uploadedFileName = null;
 
-                    // Handle optional file upload
                     if (!empty($_FILES['submission_file']['name']) && $_FILES['submission_file']['error'] === UPLOAD_ERR_OK) {
                         $file = $_FILES['submission_file'];
-                        $maxBytes = 10 * 1024 * 1024; // 10MB
+                        $maxBytes = 10 * 1024 * 1024;
 
                         if ($file['size'] > $maxBytes) {
                             $error = 'File exceeds the maximum permitted size of 10MB.';
@@ -74,13 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     }
 
                     if (empty($error)) {
-                        // Check if previous submission exists
+
                         $stmtSubCheck = $pdo->prepare("SELECT id FROM assignment_submissions WHERE assignment_id = ? AND student_id = ?");
                         $stmtSubCheck->execute([$assignmentId, $studentId]);
                         $prevSub = $stmtSubCheck->fetch();
 
                         if ($prevSub) {
-                            // Update existing submission
+
                             $sql = "UPDATE assignment_submissions SET submission_notes = ?, status = 'submitted', submitted_at = NOW()";
                             $params = [$notes];
 
@@ -96,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                             $updateStmt->execute($params);
                             set_flash('success', 'Your submission for "' . $asg['title'] . '" has been updated.');
                         } else {
-                            // Insert new submission
+
                             $insertStmt = $pdo->prepare("
                                 INSERT INTO assignment_submissions (assignment_id, student_id, file_path, file_name, submission_notes, status, submitted_at)
                                 VALUES (?, ?, ?, ?, ?, 'submitted', NOW())
@@ -117,7 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
-// Fetch all assignments with student's submission status
 $assignments = [];
 try {
     $pdo = get_db_connection();
@@ -142,7 +134,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/student_sidebar.php'; ?>
 
   <main class="portal-content">
-    
+
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h4 class="fw-bold mb-1">Course Assignments & Tasks</h4>
@@ -159,7 +151,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     <?php endif; ?>
 
-    <!-- Assignments List -->
     <div class="row g-3">
       <?php if (empty($assignments)): ?>
         <div class="col-12">
@@ -171,7 +162,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
       <?php else: ?>
         <?php foreach ($assignments as $asg): ?>
-          <?php 
+          <?php
             $isOverdue = strtotime($asg['due_date']) < time();
             $status = $asg['submission_status'] ?? 'pending';
           ?>
@@ -179,7 +170,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
             <div class="card card-custom shadow-none border">
               <div class="card-body p-4">
                 <div class="row g-3 align-items-center">
-                  
+
                   <div class="col-12 col-md-7">
                     <div class="d-flex align-items-center gap-2 mb-1">
                       <span class="badge bg-primary-subtle text-primary border border-primary-subtle"><?= e($asg['subject']) ?></span>
@@ -225,10 +216,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
                       </div>
                     <?php endif; ?>
 
-                    <button 
-                      type="button" 
-                      class="btn btn-primary" 
-                      data-bs-toggle="modal" 
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      data-bs-toggle="modal"
                       data-bs-target="#submitModal-<?= $asg['id'] ?>"
                     >
                       <i class="bi <?= ($status === 'pending') ? 'bi-cloud-arrow-up' : 'bi-pencil-square' ?> me-1"></i>
@@ -241,7 +232,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
             </div>
           </div>
 
-          <!-- Submission Modal -->
           <div class="modal fade" id="submitModal-<?= $asg['id'] ?>" tabindex="-1" aria-labelledby="modalLabel-<?= $asg['id'] ?>" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content card-custom">

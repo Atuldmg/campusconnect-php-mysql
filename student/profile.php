@@ -1,7 +1,4 @@
 <?php
-/**
- * CampusConnect - Student Profile & Account Settings
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -15,7 +12,6 @@ $pageTitle = 'My Profile';
 $error = '';
 $success = '';
 
-// Handle profile updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validate_csrf()) {
         $error = 'Security session expired. Please refresh and try again.';
@@ -35,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt = $pdo->prepare("UPDATE users SET name = ?, department = ?, phone = ?, updated_at = NOW() WHERE id = ?");
                     $stmt->execute([$name, $department, $phone, $studentId]);
 
-                    // Update active session values
                     $_SESSION['user_name'] = $name;
                     $_SESSION['user_department'] = $department;
 
@@ -83,7 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch current user database record
 $userRecord = null;
 try {
     $pdo = get_db_connection();
@@ -101,7 +95,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/student_sidebar.php'; ?>
 
   <main class="portal-content">
-    
+
     <div class="mb-4">
       <h4 class="fw-bold mb-1">Student Profile & Settings</h4>
       <p class="text-muted small mb-0">Manage your enrollment information and security credentials.</p>
@@ -114,12 +108,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <?php endif; ?>
 
     <div class="row g-4">
-      
-      <!-- Profile Information & Edit -->
+
       <div class="col-12 col-lg-7">
         <div class="card card-custom p-4 shadow-none border">
           <h5 class="fw-bold mb-3"><i class="bi bi-person-lines-fill text-primary me-2"></i>Personal Details</h5>
-          
+
           <form method="POST" action="<?= url('student/profile.php') ?>">
             <?= csrf_field() ?>
             <input type="hidden" name="action" value="update_profile">
@@ -166,11 +159,10 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
       </div>
 
-      <!-- Change Password -->
       <div class="col-12 col-lg-5">
         <div class="card card-custom p-4 shadow-none border">
           <h5 class="fw-bold mb-3"><i class="bi bi-key-fill text-warning me-2"></i>Change Password</h5>
-          
+
           <form method="POST" action="<?= url('student/profile.php') ?>">
             <?= csrf_field() ?>
             <input type="hidden" name="action" value="change_password">

@@ -1,7 +1,4 @@
 <?php
-/**
- * CampusConnect - Events & Registrations Administration (CRUD)
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -14,7 +11,6 @@ $adminId = (int)$_SESSION['user_id'];
 $pageTitle = 'Manage Events';
 $error = '';
 
-// Handle actions (Create, Edit, Delete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validate_csrf()) {
         $error = 'Security session expired. Please refresh and try again.';
@@ -57,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = 'All required fields must be supplied.';
                 } else {
                     $stmt = $pdo->prepare("
-                        UPDATE events 
+                        UPDATE events
                         SET title = ?, category = ?, event_date = ?, venue = ?, capacity = ?, description = ?
                         WHERE id = ?
                     ");
@@ -83,7 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch events with registration stats
 $events = [];
 try {
     $pdo = get_db_connection();
@@ -100,7 +95,6 @@ try {
     error_log('Fetch events error: ' . $e->getMessage());
 }
 
-// If viewing participants roster for a specific event
 $viewEventId = (int)($_GET['view_roster'] ?? 0);
 $roster = [];
 $viewEvent = null;
@@ -135,7 +129,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/admin_sidebar.php'; ?>
 
   <main class="portal-content">
-    
+
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
       <div>
         <h4 class="fw-bold mb-1">Campus Events & Registrations</h4>
@@ -154,7 +148,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     <?php endif; ?>
 
-    <!-- Event Roster Sub-view (if viewing participants) -->
     <?php if ($viewEvent): ?>
       <div class="card card-custom mb-4 shadow-none border border-primary">
         <div class="card-header-clean bg-primary-subtle">
@@ -214,7 +207,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     <?php endif; ?>
 
-    <!-- Master Events Table -->
     <div class="card card-custom shadow-none border">
       <div class="card-header-clean">
         <span class="text-body"><i class="bi bi-calendar-event-fill text-primary me-2"></i>Campus Calendar</span>
@@ -271,7 +263,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
                     </td>
                   </tr>
 
-                  <!-- Edit Event Modal -->
                   <div class="modal fade" id="editEvtModal-<?= $evt['id'] ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content card-custom">
@@ -344,7 +335,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </main>
 </div>
 
-<!-- Create Event Modal -->
 <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content card-custom">

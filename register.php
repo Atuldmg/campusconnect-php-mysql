@@ -1,14 +1,10 @@
 <?php
-/**
- * CampusConnect - Student Registration Page
- */
 
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/csrf.php';
 
-// Redirect if already logged in
 if (is_logged_in()) {
     header('Location: ' . url('student/dashboard.php'));
     exit;
@@ -48,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $pdo = get_db_connection();
 
-                // Check for existing email
                 $checkStmt = $pdo->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
                 $checkStmt->execute([$email]);
                 if ($checkStmt->fetch()) {
@@ -62,8 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $insertStmt->execute([$name, $email, $hash, $department, $rollNumber, $phone]);
 
                     $userId = $pdo->lastInsertId();
-                    
-                    // Log the new student in automatically
+
                     $newUser = [
                         'id'          => $userId,
                         'name'        => $name,
@@ -93,7 +87,7 @@ require_once __DIR__ . '/includes/header.php';
   <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
       <div class="card card-custom p-4 shadow-sm">
-        
+
         <div class="text-center mb-4">
           <div class="stat-icon-wrapper bg-primary-subtle text-primary mx-auto mb-2" style="width: 50px; height: 50px;">
             <i class="bi bi-person-plus fs-3"></i>

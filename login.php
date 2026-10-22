@@ -1,14 +1,10 @@
 <?php
-/**
- * CampusConnect - User Authentication Page
- */
 
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/csrf.php';
 
-// Redirect if already logged in
 if (is_logged_in()) {
     $role = $_SESSION['user_role'] ?? 'student';
     header('Location: ' . ($role === 'admin' ? url('admin/dashboard.php') : url('student/dashboard.php')));
@@ -48,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                     exit;
                 } else {
-                    // Generic security message to prevent user enumeration
+
                     $error = 'Invalid email credentials or password.';
                 }
             } catch (Exception $e) {
@@ -66,7 +62,7 @@ require_once __DIR__ . '/includes/header.php';
   <div class="row justify-content-center">
     <div class="col-12 col-sm-10 col-md-8 col-lg-5">
       <div class="card card-custom p-4 shadow-sm">
-        
+
         <div class="text-center mb-4">
           <div class="stat-icon-wrapper bg-primary-subtle text-primary mx-auto mb-2" style="width: 54px; height: 54px;">
             <i class="bi bi-mortarboard fs-3"></i>
@@ -114,7 +110,6 @@ require_once __DIR__ . '/includes/header.php';
           New student? <a href="<?= url('register.php') ?>" class="text-primary text-decoration-none fw-semibold">Register for Student Account</a>
         </div>
 
-        <!-- Demonstration Credentials Notice (Essential for College Viva Demo) -->
         <div class="mt-4 p-3 bg-body-tertiary border rounded small">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fw-bold text-body"><i class="bi bi-info-circle me-1"></i>Demo Accounts for Evaluation:</span>

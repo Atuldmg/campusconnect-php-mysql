@@ -1,7 +1,5 @@
 <?php
-/**
- * CampusConnect - Administrator Portal Sidebar Navigation
- */
+
 $currentScript = basename($_SERVER['PHP_SELF']);
 ?>
 <aside class="portal-sidebar" aria-label="Administrator Navigation">

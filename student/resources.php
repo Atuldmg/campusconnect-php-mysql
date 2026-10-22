@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - Student Study Resource Library
- * Interactive repository featuring asynchronous live search, subject filters, and secure downloads.
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -18,11 +14,9 @@ $initialResources = [];
 try {
     $pdo = get_db_connection();
 
-    // Fetch distinct subjects for filter
     $stmtSubjects = $pdo->query("SELECT DISTINCT subject FROM resources WHERE subject IS NOT NULL AND subject != '' ORDER BY subject ASC");
     $subjects = $stmtSubjects->fetchAll(PDO::FETCH_COLUMN);
 
-    // Initial server-side load of resources
     $stmtRes = $pdo->query("SELECT id, title, subject, description, file_name, file_size, file_type, created_at FROM resources ORDER BY created_at DESC");
     $initialResources = $stmtRes->fetchAll();
 
@@ -37,8 +31,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/student_sidebar.php'; ?>
 
   <main class="portal-content">
-    
-    <!-- Page Header -->
+
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
       <div>
         <h4 class="fw-bold mb-1">Study Resource Library</h4>
@@ -51,17 +44,16 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
 
-    <!-- AJAX Search & Filter Controls -->
     <div class="card card-custom p-3 mb-4 shadow-none border">
       <div class="row g-2 align-items-center">
         <div class="col-12 col-md-8">
           <div class="search-wrapper">
             <i class="bi bi-search"></i>
-            <input 
-              type="text" 
-              class="form-control search-input" 
-              id="ajaxSearchInput" 
-              placeholder="Search by topic, keyword, or document title..." 
+            <input
+              type="text"
+              class="form-control search-input"
+              id="ajaxSearchInput"
+              placeholder="Search by topic, keyword, or document title..."
               data-endpoint="<?= url('api/search.php') ?>"
               data-base-url="<?= url() ?>"
               autocomplete="off"
@@ -79,14 +71,12 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
       </div>
 
-      <!-- Live Search Status Indicator -->
       <div id="searchLoadingSpinner" class="d-none mt-2 text-muted small">
         <div class="spinner-border spinner-border-sm text-primary me-1" role="status"></div>
         Searching repository...
       </div>
     </div>
 
-    <!-- Results Container (Dynamically updated via Fetch API) -->
     <div id="searchResultsContainer">
       <?php if (empty($initialResources)): ?>
         <div class="card card-custom p-5 text-center text-muted">
@@ -126,7 +116,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
   </main>
 </div>
 
-<!-- AJAX Search Handler -->
 <script src="<?= url('assets/js/search.js') ?>"></script>
 
 <?php require_once dirname(__DIR__) . '/includes/footer.php'; ?>

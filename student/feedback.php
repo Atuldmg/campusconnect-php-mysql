@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - Student Feedback & Grievance Submission
- * Submit issues or suggestions with live character counters and track administrative review status.
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -47,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch student's prior feedback submissions
 $pastFeedback = [];
 try {
     $pdo = get_db_connection();
@@ -65,7 +60,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/student_sidebar.php'; ?>
 
   <main class="portal-content">
-    
+
     <div class="mb-4">
       <h4 class="fw-bold mb-1">Student Feedback & Inquiries</h4>
       <p class="text-muted small mb-0">Share suggestions, academic feedback, or facility requests directly with department leadership.</p>
@@ -78,12 +73,11 @@ require_once dirname(__DIR__) . '/includes/header.php';
     <?php endif; ?>
 
     <div class="row g-4">
-      
-      <!-- Submission Form -->
+
       <div class="col-12 col-lg-5">
         <div class="card card-custom p-4 shadow-none border">
           <h5 class="fw-bold mb-3"><i class="bi bi-pencil-square text-primary me-2"></i>New Feedback Message</h5>
-          
+
           <form method="POST" action="<?= url('student/feedback.php') ?>" class="needs-validation" novalidate>
             <?= csrf_field() ?>
 
@@ -108,14 +102,14 @@ require_once dirname(__DIR__) . '/includes/header.php';
                 <label for="fb_message" class="form-label mb-0">Detailed Message *</label>
                 <span class="small text-muted" id="fb-char-counter">0 / 1000 characters</span>
               </div>
-              <textarea 
-                class="form-control" 
-                id="fb_message" 
-                name="message" 
-                rows="5" 
-                maxlength="1000" 
+              <textarea
+                class="form-control"
+                id="fb_message"
+                name="message"
+                rows="5"
+                maxlength="1000"
                 data-char-count="fb-char-counter"
-                placeholder="Explain the suggestion, constructive concern, or inquiry clearly..." 
+                placeholder="Explain the suggestion, constructive concern, or inquiry clearly..."
                 required
               ></textarea>
             </div>
@@ -127,7 +121,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
       </div>
 
-      <!-- Past Submissions History -->
       <div class="col-12 col-lg-7">
         <div class="card card-custom h-100 shadow-none border">
           <div class="card-header-clean">

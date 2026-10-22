@@ -1,8 +1,5 @@
 <?php
-/**
- * CampusConnect - Global Footer Template
- * Semantic HTML5 footer, script loading, and accessible UI links.
- */
+
 ?>
   </main>
 
@@ -37,13 +34,10 @@
     </div>
   </footer>
 
-  <!-- Bootstrap 5.3.3 Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- jQuery 3.7.1 (For Web Development Syllabus jQuery demonstration) -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-  <!-- CampusConnect Application Scripts -->
   <script src="<?= url('assets/js/app.js') ?>"></script>
   <script src="<?= url('assets/js/validation.js') ?>"></script>
 </body>

@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - About & Syllabus Reference Page
- * Educational reference detailing architecture, security models, and syllabus coverage.
- */
 
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/auth.php';
@@ -12,18 +8,16 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
 <div class="container-fluid px-3 px-lg-4 py-4">
-  
-  <!-- Page Header -->
+
   <div class="mb-4">
     <h3 class="fw-bold mb-1">About CampusConnect & Syllabus Demonstration</h3>
     <p class="text-muted">A full-stack Web Development academic project demonstrating HTML5, CSS3, Bootstrap 5, Vanilla JS, jQuery, XML/DTD, PHP 8, and MySQL.</p>
   </div>
 
-  <!-- Educational Sandbox for Obsolete HTML Syllabus Requirement (Marquee) -->
   <div class="syllabus-marquee-container shadow-none">
     <div class="d-flex align-items-center gap-2">
       <span class="badge bg-primary text-white"><i class="bi bi-info-circle me-1"></i>Syllabus Demo: Legacy HTML Tag</span>
-      <!-- Educational inclusion of syllabus <marquee> element in isolated container -->
+
       <marquee behavior="scroll" direction="left" scrollamount="5" class="fw-semibold text-primary">
         CampusConnect Portal: Welcome Evaluators & Faculty &bull; PHP 8.0 &bull; MySQL PDO &bull; Bootstrap 5 &bull; XML/DTD &bull; AJAX Fetch API &bull; Bcrypt Security
       </marquee>
@@ -31,11 +25,9 @@ require_once __DIR__ . '/includes/header.php';
   </div>
 
   <div class="row g-4">
-    
-    <!-- Left Column: Project Overview -->
+
     <div class="col-lg-8">
-      
-      <!-- Core Architecture Card -->
+
       <div class="card card-custom p-4 mb-4">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h5 class="fw-bold mb-0"><i class="bi bi-diagram-3-fill text-primary me-2"></i>System Architecture</h5>
@@ -46,7 +38,7 @@ require_once __DIR__ . '/includes/header.php';
         <p class="text-muted small">
           CampusConnect is designed using an MVC-inspired modular PHP architecture. It separates presentation layers (reusable PHP partials and Bootstrap components), business logic (authentication guards, validation rules, action handlers), and relational persistence (PDO transactions with MySQL).
         </p>
-        
+
         <div class="row g-3 mt-1">
           <div class="col-md-6">
             <div class="p-3 border rounded bg-body-tertiary">
@@ -76,7 +68,6 @@ require_once __DIR__ . '/includes/header.php';
         </div>
       </div>
 
-      <!-- Meaningful jQuery Syllabus Demonstration -->
       <div class="card card-custom p-4 mb-4">
         <div class="d-flex justify-content-between align-items-center mb-2">
           <h5 class="fw-bold mb-0">
@@ -96,7 +87,6 @@ require_once __DIR__ . '/includes/header.php';
             </button>
           </div>
 
-          <!-- Collapsible content managed via jQuery -->
           <div id="jquery-collapsible-box" style="display: none;" class="mt-3 pt-3 border-top small text-muted">
             <div class="alert alert-info py-2 mb-2">
               <i class="bi bi-check2-circle me-1"></i>jQuery event <code>$('#btn-jquery-demo').on('click')</code> fired successfully.
@@ -112,7 +102,6 @@ require_once __DIR__ . '/includes/header.php';
         </div>
       </div>
 
-      <!-- Syllabus Coverage Checklist Card -->
       <div class="card card-custom p-4">
         <h5 class="fw-bold mb-3"><i class="bi bi-card-checklist text-success me-2"></i>Web Development Syllabus Coverage</h5>
         <div class="table-responsive">
@@ -172,10 +161,8 @@ require_once __DIR__ . '/includes/header.php';
 
     </div>
 
-    <!-- Right Column: Security & Environment Specs -->
     <div class="col-lg-4">
-      
-      <!-- Security Checklist Card -->
+
       <div class="card card-custom p-4 mb-4">
         <h6 class="fw-bold mb-3"><i class="bi bi-shield-lock-fill text-danger me-2"></i>Security Safeguards</h6>
         <ul class="list-unstyled small text-muted d-flex flex-column gap-2 mb-0">
@@ -206,7 +193,6 @@ require_once __DIR__ . '/includes/header.php';
         </ul>
       </div>
 
-      <!-- Environment Specifications Card -->
       <div class="card card-custom p-4 bg-body-tertiary">
         <h6 class="fw-bold mb-3"><i class="bi bi-cpu-fill text-info me-2"></i>Runtime Environment</h6>
         <div class="small text-muted d-flex flex-column gap-2">
@@ -239,7 +225,6 @@ require_once __DIR__ . '/includes/header.php';
 
 </div>
 
-<!-- Inline jQuery Script for the Demonstration Section -->
 <script>
   $(document).ready(function() {
     $('#btn-jquery-demo').on('click', function(e) {

@@ -1,12 +1,4 @@
 <?php
-/**
- * CampusConnect - CLI First Administrator Provisioning Script
- * 
- * Usage:
- *   php scripts/create_admin.php "Admin Name" "email@campusconnect.edu" "SecurePassword123!"
- * 
- * Or run interactively without arguments.
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 
@@ -51,8 +43,7 @@ if (strlen($password) < 8) {
 
 try {
     $pdo = get_db_connection();
-    
-    // Check if email already exists
+
     $checkStmt = $pdo->prepare("SELECT id, role FROM users WHERE email = ?");
     $checkStmt->execute([$email]);
     $existing = $checkStmt->fetch();
@@ -60,12 +51,12 @@ try {
     $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
     if ($existing) {
-        // Update user to admin role and update password
+
         $updateStmt = $pdo->prepare("UPDATE users SET name = ?, password_hash = ?, role = 'admin', updated_at = NOW() WHERE id = ?");
         $updateStmt->execute([$name, $hash, $existing['id']]);
         echo "[SUCCESS] Existing user account (ID: {$existing['id']}) updated to Administrator.\n";
     } else {
-        // Insert new admin
+
         $insertStmt = $pdo->prepare("INSERT INTO users (name, email, password_hash, role, department, created_at) VALUES (?, ?, ?, 'admin', 'Campus IT & Administration', NOW())");
         $insertStmt->execute([$name, $email, $hash]);
         $newId = $pdo->lastInsertId();

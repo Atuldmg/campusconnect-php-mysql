@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - Automated Verification & Quality Assurance Suite
- * Validates database operations, security constraints, and API responses.
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -26,9 +22,6 @@ function assert_test(string $name, bool $condition, string $detail = '') {
     }
 }
 
-// -----------------------------------------------------------
-// TEST 1: Database Connection
-// -----------------------------------------------------------
 try {
     $pdo = get_db_connection();
     assert_test("Database PDO Connection", $pdo instanceof PDO);
@@ -36,9 +29,6 @@ try {
     assert_test("Database PDO Connection", false, $e->getMessage());
 }
 
-// -----------------------------------------------------------
-// TEST 2: Schema Tables Existence
-// -----------------------------------------------------------
 try {
     $expectedTables = ['users', 'announcements', 'resources', 'assignments', 'assignment_submissions', 'events', 'event_registrations', 'feedback'];
     $driver = $pdo->getAttribute(PDO::ATTR_DRIVER_NAME);
@@ -57,9 +47,6 @@ try {
     assert_test("All 8 Required Database Tables Exist", false, $e->getMessage());
 }
 
-// -----------------------------------------------------------
-// TEST 3: Admin & Student Seed Accounts & Bcrypt Verification
-// -----------------------------------------------------------
 try {
     $stmt = $pdo->prepare("SELECT id, name, email, password_hash, role FROM users WHERE email = ?");
     $stmt->execute(['admin@campusconnect.edu']);
@@ -77,11 +64,8 @@ try {
     assert_test("Seed Accounts & Bcrypt Password", false, $e->getMessage());
 }
 
-// -----------------------------------------------------------
-// TEST 4: Unique Constraints (Event Registrations & Duplicate Prevention)
-// -----------------------------------------------------------
 try {
-    // Attempt duplicate registration for student 2 on event 1 (already registered in seed)
+
     $dupCaught = false;
     try {
         $stmtDup = $pdo->prepare("INSERT INTO event_registrations (event_id, student_id, registered_at) VALUES (1, 2, NOW())");
@@ -94,24 +78,15 @@ try {
     assert_test("Duplicate Event Registration Prevention", false, $e->getMessage());
 }
 
-// -----------------------------------------------------------
-// TEST 5: CSRF Token Generation & Validation
-// -----------------------------------------------------------
 $token = get_csrf_token();
 $validCheck = validate_csrf($token);
 $invalidCheck = !validate_csrf('fake_token_12345');
 assert_test("CSRF Token Cryptographic Validation", $validCheck && $invalidCheck);
 
-// -----------------------------------------------------------
-// TEST 6: XSS Sanitization Helper e()
-// -----------------------------------------------------------
 $rawMalicious = '<script>alert("xss")</script>';
 $escaped = e($rawMalicious);
 assert_test("XSS Sanitization Helper e()", $escaped === '&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;');
 
-// -----------------------------------------------------------
-// TEST 7: XML Well-Formedness & DTD Schema Validation
-// -----------------------------------------------------------
 try {
     $xmlPath = dirname(__DIR__) . '/xml/courses.xml';
     $dom = new DOMDocument();
@@ -126,9 +101,6 @@ try {
     assert_test("XML Course Catalogue & DTD Schema Validation", false, $e->getMessage());
 }
 
-// -----------------------------------------------------------
-// TEST 8: Live Search Query Logic
-// -----------------------------------------------------------
 try {
     $q = 'Web';
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM resources WHERE title LIKE ? OR description LIKE ?");
@@ -139,9 +111,6 @@ try {
     assert_test("Study Resource Query Search Execution", false, $e->getMessage());
 }
 
-// -----------------------------------------------------------
-// SUMMARY
-// -----------------------------------------------------------
 echo "\n========================================================\n";
 echo " Test Suite Finished: {$passed} Passed, {$failed} Failed\n";
 echo "========================================================\n";

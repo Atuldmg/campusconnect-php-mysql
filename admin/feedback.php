@@ -1,7 +1,4 @@
 <?php
-/**
- * CampusConnect - Student Feedback & Grievances Administration
- */
 
 require_once dirname(__DIR__) . '/config/database.php';
 require_once dirname(__DIR__) . '/includes/functions.php';
@@ -13,7 +10,6 @@ require_role('admin');
 $pageTitle = 'Student Feedback Inquiries';
 $error = '';
 
-// Handle actions (Respond, Delete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!validate_csrf()) {
         $error = 'Security session expired. Please refresh and try again.';
@@ -54,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch feedback with filters
 $statusFilter = trim($_GET['status'] ?? '');
 
 $feedbacks = [];
@@ -90,7 +85,7 @@ require_once dirname(__DIR__) . '/includes/header.php';
   <?php require_once dirname(__DIR__) . '/includes/admin_sidebar.php'; ?>
 
   <main class="portal-content">
-    
+
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
       <div>
         <h4 class="fw-bold mb-1">Student Feedback & Inquiries</h4>
@@ -109,7 +104,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     <?php endif; ?>
 
-    <!-- Filter Buttons Bar -->
     <div class="d-flex gap-2 mb-3">
       <a href="<?= url('admin/feedback.php') ?>" class="btn btn-sm <?= ($statusFilter === '') ? 'btn-primary' : 'btn-outline-secondary' ?>">
         All Inquiries
@@ -125,7 +119,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </a>
     </div>
 
-    <!-- Feedbacks List -->
     <div class="row g-3">
       <?php if (empty($feedbacks)): ?>
         <div class="col-12">
@@ -189,7 +182,6 @@ require_once dirname(__DIR__) . '/includes/header.php';
             </div>
           </div>
 
-          <!-- Respond Modal -->
           <div class="modal fade" id="respondModal-<?= $fb['id'] ?>" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
               <div class="modal-content card-custom">

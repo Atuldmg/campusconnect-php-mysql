@@ -1,9 +1,3 @@
-/**
- * CampusConnect - AJAX Live Search Module
- * Provides asynchronous searching for study resources and announcements
- * without full page reloads using the native Fetch API.
- */
-
 (function () {
   'use strict';
 
@@ -134,7 +128,6 @@
       });
     }
 
-    // Debounce search input keystrokes
     searchInput.addEventListener('input', () => {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(performSearch, 300);

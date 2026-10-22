@@ -1,9 +1,4 @@
 <?php
-/**
- * CampusConnect - System Architecture & Execution Flow
- * Interactive visual architecture specification featuring high-level flowcharts
- * and sequence execution diagrams rendered with Mermaid.js.
- */
 
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/auth.php';
@@ -133,8 +128,7 @@ require_once __DIR__ . '/includes/header.php';
 </style>
 
 <div class="container-fluid px-3 px-lg-4 py-4">
-  
-  <!-- Breadcrumb Navigation -->
+
   <nav aria-label="breadcrumb" class="mb-3">
     <ol class="breadcrumb small">
       <li class="breadcrumb-item"><a href="<?= url('index.php') ?>" class="text-decoration-none">Home</a></li>
@@ -143,9 +137,8 @@ require_once __DIR__ . '/includes/header.php';
     </ol>
   </nav>
 
-  <!-- Main Architecture Container -->
   <div class="arch-wrapper">
-    
+
     <div class="arch-title">
       <span>🏗️ Architecture</span>
     </div>
@@ -154,14 +147,13 @@ require_once __DIR__ . '/includes/header.php';
       The <strong>CampusConnect</strong> portfolio architecture is engineered for dual-mode execution: instantaneous static asset delivery via optimized Apache web servers, and modular server-side processing powered by PHP 8.x PDO, XML DOM/DTD parsing, and MySQL relational backends.
     </p>
 
-    <!-- SECTION 1: High-Level Flow -->
     <div class="mb-4">
       <div class="d-flex justify-content-between align-items-center mb-2">
         <h4 class="diagram-section-title">High-Level Flow</h4>
       </div>
 
       <div class="diagram-card" id="card-high-level">
-        <!-- Top Right Actions -->
+
         <div class="diagram-actions">
           <button class="diagram-btn" onclick="copyMermaid('mermaid-flowchart-code')" title="Copy Mermaid Definition">
             <i class="bi bi-clipboard"></i>
@@ -171,7 +163,6 @@ require_once __DIR__ . '/includes/header.php';
           </button>
         </div>
 
-        <!-- Mermaid Render Viewport -->
         <div class="diagram-viewport" id="viewport-flowchart">
           <pre class="mermaid" id="mermaid-flowchart-svg">
 flowchart TD
@@ -181,23 +172,23 @@ flowchart TD
     Status{"Query Execution\nStatus?"}:::decision
     Success["Render Interactive\nScorecard & Data Grid"]:::success
     Error["Trigger Inline Validation\n& Error Alert"]:::error
-    
+
     XML[("XML Data Store:\n courses.xml & courses.dtd")]:::xmlStore
     MySQL[("MySQL Database:\n campusconnect (InnoDB)")]:::sqlStore
 
     Browser -->|"HTTP Navigation"| Gateway
     Gateway -->|"POST / GET Request"| PHP
-    
+
     PHP -->|"XPath Query & DOM"| XML
     XML -.->|"Parsed Subject Trees"| PHP
-    
+
     PHP -->|"Prepared SQL Query"| MySQL
     MySQL -.->|"Resultset & RowCount"| PHP
-    
+
     PHP --> Status
     Status -->|"Success"| Success
     Status -->|"Error"| Error
-    
+
     Success -->|"Response Payload"| Gateway
     Error -->|"Response Payload"| Gateway
     Gateway -->|"Render to Viewport"| Browser
@@ -213,14 +204,12 @@ flowchart TD
           </pre>
         </div>
 
-        <!-- Floating Zoom Controls -->
         <div class="diagram-controls-floating">
           <button class="diagram-btn" onclick="zoomDiagram('viewport-flowchart', 1.15)" title="Zoom In"><i class="bi bi-zoom-in"></i></button>
           <button class="diagram-btn" onclick="zoomDiagram('viewport-flowchart', 0.85)" title="Zoom Out"><i class="bi bi-zoom-out"></i></button>
           <button class="diagram-btn" onclick="resetZoom('viewport-flowchart')" title="Reset Zoom"><i class="bi bi-arrow-counterclockwise"></i></button>
         </div>
 
-        <!-- Raw Mermaid Definition Accordion -->
         <div class="code-accordion">
           <details>
             <summary class="small text-muted" style="cursor: pointer;">
@@ -233,23 +222,23 @@ flowchart TD
     Status{"Query Execution\nStatus?"}:::decision
     Success["Render Interactive\nScorecard & Data Grid"]:::success
     Error["Trigger Inline Validation\n& Error Alert"]:::error
-    
+
     XML[("XML Data Store:\n courses.xml & courses.dtd")]:::xmlStore
     MySQL[("MySQL Database:\n campusconnect (InnoDB)")]:::sqlStore
 
     Browser -->|"HTTP Navigation"| Gateway
     Gateway -->|"POST / GET Request"| PHP
-    
+
     PHP -->|"XPath Query & DOM"| XML
     XML -.->|"Parsed Subject Trees"| PHP
-    
+
     PHP -->|"Prepared SQL Query"| MySQL
     MySQL -.->|"Resultset & RowCount"| PHP
-    
+
     PHP --> Status
     Status -->|"Success"| Success
     Status -->|"Error"| Error
-    
+
     Success -->|"Response Payload"| Gateway
     Error -->|"Response Payload"| Gateway
     Gateway -->|"Render to Viewport"| Browser</pre>
@@ -258,14 +247,13 @@ flowchart TD
       </div>
     </div>
 
-    <!-- SECTION 2: Component & Execution Flow -->
     <div>
       <div class="d-flex justify-content-between align-items-center mb-2">
         <h4 class="diagram-section-title">Component & Execution Flow</h4>
       </div>
 
       <div class="diagram-card" id="card-sequence">
-        <!-- Top Right Actions -->
+
         <div class="diagram-actions">
           <button class="diagram-btn" onclick="copyMermaid('mermaid-sequence-code')" title="Copy Mermaid Definition">
             <i class="bi bi-clipboard"></i>
@@ -275,7 +263,6 @@ flowchart TD
           </button>
         </div>
 
-        <!-- Mermaid Render Viewport -->
         <div class="diagram-viewport" id="viewport-sequence">
           <pre class="mermaid" id="mermaid-sequence-svg">
 sequenceDiagram
@@ -302,14 +289,12 @@ sequenceDiagram
           </pre>
         </div>
 
-        <!-- Floating Zoom Controls -->
         <div class="diagram-controls-floating">
           <button class="diagram-btn" onclick="zoomDiagram('viewport-sequence', 1.15)" title="Zoom In"><i class="bi bi-zoom-in"></i></button>
           <button class="diagram-btn" onclick="zoomDiagram('viewport-sequence', 0.85)" title="Zoom Out"><i class="bi bi-zoom-out"></i></button>
           <button class="diagram-btn" onclick="resetZoom('viewport-sequence')" title="Reset Zoom"><i class="bi bi-arrow-counterclockwise"></i></button>
         </div>
 
-        <!-- Raw Mermaid Definition Accordion -->
         <div class="code-accordion">
           <details>
             <summary class="small text-muted" style="cursor: pointer;">
@@ -345,7 +330,6 @@ sequenceDiagram
 
 </div>
 
-<!-- Mermaid.js 10 Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
 <script>
   mermaid.initialize({

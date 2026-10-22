@@ -1,8 +1,4 @@
 <?php
-/**
- * CampusConnect - Public Landing Page
- * Centralized smart campus portal overview with dynamic announcements and upcoming events.
- */
 
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/functions.php';
@@ -10,7 +6,6 @@ require_once __DIR__ . '/includes/auth.php';
 
 $pageTitle = 'Home';
 
-// Fetch live database statistics and featured records
 $stats = [
     'students'  => 0,
     'resources' => 0,
@@ -24,17 +19,14 @@ $upcomingEvents = [];
 try {
     $pdo = get_db_connection();
 
-    // Query statistics
     $stats['students']  = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE role = 'student'")->fetchColumn();
     $stats['resources'] = (int)$pdo->query("SELECT COUNT(*) FROM resources")->fetchColumn();
     $stats['events']    = (int)$pdo->query("SELECT COUNT(*) FROM events WHERE event_date >= NOW()")->fetchColumn();
     $stats['assignments'] = (int)$pdo->query("SELECT COUNT(*) FROM assignments")->fetchColumn();
 
-    // Query latest 3 announcements
     $stmtAnn = $pdo->query("SELECT id, title, content, category, is_pinned, created_at FROM announcements ORDER BY is_pinned DESC, created_at DESC LIMIT 3");
     $recentAnnouncements = $stmtAnn->fetchAll();
 
-    // Query next 3 upcoming events
     $stmtEvt = $pdo->query("SELECT id, title, description, event_date, venue, category FROM events WHERE event_date >= NOW() ORDER BY event_date ASC LIMIT 3");
     $upcomingEvents = $stmtEvt->fetchAll();
 
@@ -45,7 +37,6 @@ try {
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-<!-- Hero Header Section -->
 <section class="py-5 bg-body-tertiary border-bottom">
   <div class="container-fluid px-3 px-lg-4">
     <div class="row align-items-center g-4">
@@ -84,7 +75,6 @@ require_once __DIR__ . '/includes/header.php';
         </div>
       </div>
 
-      <!-- Quick Metrics Grid -->
       <div class="col-lg-5">
         <div class="row g-3">
           <div class="col-6">
@@ -117,11 +107,9 @@ require_once __DIR__ . '/includes/header.php';
   </div>
 </section>
 
-<!-- Main Highlights Section -->
 <div class="container-fluid px-3 px-lg-4 py-5">
   <div class="row g-4">
-    
-    <!-- Left Column: Announcements -->
+
     <div class="col-lg-7">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="fw-bold mb-0">
@@ -159,7 +147,6 @@ require_once __DIR__ . '/includes/header.php';
       <?php endif; ?>
     </div>
 
-    <!-- Right Column: Upcoming Events -->
     <div class="col-lg-5">
       <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="fw-bold mb-0">
@@ -195,7 +182,6 @@ require_once __DIR__ . '/includes/header.php';
         </div>
       <?php endif; ?>
 
-      <!-- Quick Portal Features Card -->
       <div class="card card-custom mt-4 p-3 bg-body-tertiary">
         <h6 class="fw-bold mb-2"><i class="bi bi-lightbulb text-warning me-2"></i>Key Portal Capabilities</h6>
         <ul class="list-unstyled mb-0 small text-muted d-flex flex-column gap-2">

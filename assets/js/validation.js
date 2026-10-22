@@ -1,15 +1,8 @@
-/**
- * CampusConnect - Client-Side Form Validation Module
- * Provides real-time feedback using standard Bootstrap 5 validation styles.
- */
-
 (function () {
   'use strict';
 
   document.addEventListener('DOMContentLoaded', () => {
-    // --------------------------------------------------------
-    // General Bootstrap Form Validation
-    // --------------------------------------------------------
+
     const forms = document.querySelectorAll('.needs-validation');
 
     Array.from(forms).forEach(form => {
@@ -22,9 +15,6 @@
       }, false);
     });
 
-    // --------------------------------------------------------
-    // Registration Form Real-Time Validation
-    // --------------------------------------------------------
     const regForm = document.getElementById('registrationForm');
     if (regForm) {
       const nameInput = document.getElementById('reg_name');
