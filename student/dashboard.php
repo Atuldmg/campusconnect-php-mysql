@@ -111,78 +111,80 @@ require_once dirname(__DIR__) . '/includes/header.php';
       </div>
     </div>
 
-    <!-- 4 Key Statistic Cards -->
-    <div class="row g-3 mb-4">
-      <div class="col-6 col-xl-3">
-        <div class="stat-card">
-          <div>
+    <!-- 4 Key Statistic Cards (Responsive & Fit to Screen) -->
+    <div class="row g-3 mb-3">
+      <div class="col-6 col-lg-3">
+        <a href="<?= url('student/resources.php') ?>" class="stat-card">
+          <div class="stat-card-content">
             <div class="stat-label">Study Files</div>
             <div class="stat-value"><?= number_format($stats['resources']) ?></div>
-            <small class="text-muted">Available in library</small>
+            <small class="stat-desc">In digital library</small>
           </div>
           <div class="stat-icon-wrapper bg-primary-subtle text-primary">
             <i class="bi bi-folder2-open"></i>
           </div>
-        </div>
+        </a>
       </div>
 
-      <div class="col-6 col-xl-3">
-        <div class="stat-card">
-          <div>
+      <div class="col-6 col-lg-3">
+        <a href="<?= url('student/assignments.php') ?>" class="stat-card">
+          <div class="stat-card-content">
             <div class="stat-label">Pending Tasks</div>
             <div class="stat-value text-warning"><?= number_format($stats['pending_asg']) ?></div>
-            <small class="text-muted">Due for submission</small>
+            <small class="stat-desc">Due for submission</small>
           </div>
           <div class="stat-icon-wrapper bg-warning-subtle text-warning-emphasis">
             <i class="bi bi-clock-history"></i>
           </div>
-        </div>
+        </a>
       </div>
 
-      <div class="col-6 col-xl-3">
-        <div class="stat-card">
-          <div>
+      <div class="col-6 col-lg-3">
+        <a href="<?= url('student/events.php') ?>" class="stat-card">
+          <div class="stat-card-content">
             <div class="stat-label">My Events</div>
             <div class="stat-value text-success"><?= number_format($stats['events_reg']) ?></div>
-            <small class="text-muted">Registered activities</small>
+            <small class="stat-desc">Registered items</small>
           </div>
           <div class="stat-icon-wrapper bg-success-subtle text-success">
             <i class="bi bi-calendar2-check"></i>
           </div>
-        </div>
+        </a>
       </div>
 
-      <div class="col-6 col-xl-3">
-        <div class="stat-card">
-          <div>
-            <div class="stat-label">Notice Board</div>
+      <div class="col-6 col-lg-3">
+        <a href="#notice-board-card" class="stat-card border-info-subtle">
+          <div class="stat-card-content">
+            <div class="stat-label text-info-emphasis">Notice Board</div>
             <div class="stat-value text-info"><?= number_format($stats['announcements']) ?></div>
-            <small class="text-muted">Active notices</small>
+            <small class="stat-desc">Active circulars</small>
           </div>
           <div class="stat-icon-wrapper bg-info-subtle text-info-emphasis">
             <i class="bi bi-megaphone"></i>
           </div>
-        </div>
+        </a>
       </div>
     </div>
 
-    <!-- Content Row 1: Course Assignments -->
-    <div class="row g-4 mb-4">
-      <div class="col-12 col-xl-8">
+    <!-- Primary Row: Assignment Deadlines & Notice Board (Fit on Screen) -->
+    <div class="row g-3 mb-3">
+      
+      <!-- Left: Course Assignments Table -->
+      <div class="col-12 col-xl-7">
         <div class="card card-custom h-100 shadow-none border">
-          <div class="card-header-clean">
-            <span class="text-body"><i class="bi bi-journal-text text-primary me-2"></i>Assignment Deadlines</span>
+          <div class="card-header-clean py-2 px-3">
+            <span class="text-body fw-bold"><i class="bi bi-journal-text text-primary me-2"></i>Assignment Deadlines</span>
             <a href="<?= url('student/assignments.php') ?>" class="small text-primary text-decoration-none">View All</a>
           </div>
           <div class="card-body p-0">
             <div class="table-responsive">
-              <table class="table table-custom mb-0 align-middle">
+              <table class="table table-custom table-sm mb-0 align-middle">
                 <thead>
                   <tr>
-                    <th>Title & Subject</th>
+                    <th class="ps-3">Title & Subject</th>
                     <th>Due Date</th>
                     <th>Status</th>
-                    <th class="text-end">Action</th>
+                    <th class="text-end pe-3">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -197,29 +199,29 @@ require_once dirname(__DIR__) . '/includes/header.php';
                         $status = $asg['submission_status'] ?? 'pending';
                       ?>
                       <tr>
-                        <td>
-                          <div class="fw-bold text-body"><?= e($asg['title']) ?></div>
-                          <span class="badge bg-secondary-subtle text-secondary small"><?= e($asg['subject']) ?></span>
+                        <td class="ps-3">
+                          <div class="fw-bold text-body small text-truncate" style="max-width: 220px;"><?= e($asg['title']) ?></div>
+                          <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.7rem;"><?= e($asg['subject']) ?></span>
                         </td>
                         <td>
-                          <div class="small <?= ($isOverdue && $status === 'pending') ? 'text-danger fw-bold' : 'text-muted' ?>">
+                          <div class="small <?= ($isOverdue && $status === 'pending') ? 'text-danger fw-bold' : 'text-muted' ?>" style="font-size: 0.78rem;">
                             <?= format_date($asg['due_date'], 'M d, Y h:i A') ?>
                           </div>
                           <?php if ($isOverdue && $status === 'pending'): ?>
-                            <span class="badge bg-danger-subtle text-danger py-0" style="font-size: 0.7rem;">Overdue</span>
+                            <span class="badge bg-danger-subtle text-danger py-0" style="font-size: 0.68rem;">Overdue</span>
                           <?php endif; ?>
                         </td>
                         <td>
                           <?php if ($status === 'graded'): ?>
-                            <span class="badge bg-success-subtle text-success">Graded: <?= e($asg['grade']) ?></span>
+                            <span class="badge bg-success-subtle text-success py-1" style="font-size: 0.72rem;">Graded: <?= e($asg['grade']) ?></span>
                           <?php elseif ($status === 'submitted'): ?>
-                            <span class="badge bg-info-subtle text-info-emphasis">Submitted</span>
+                            <span class="badge bg-info-subtle text-info-emphasis py-1" style="font-size: 0.72rem;">Submitted</span>
                           <?php else: ?>
-                            <span class="badge bg-warning-subtle text-warning-emphasis">Pending</span>
+                            <span class="badge bg-warning-subtle text-warning-emphasis py-1" style="font-size: 0.72rem;">Pending</span>
                           <?php endif; ?>
                         </td>
-                        <td class="text-end">
-                          <a href="<?= url('student/assignments.php') ?>" class="btn btn-sm btn-outline-primary py-1 px-2">
+                        <td class="text-end pe-3">
+                          <a href="<?= url('student/assignments.php') ?>" class="btn btn-sm btn-outline-primary py-0.5 px-2" style="font-size: 0.75rem;">
                             <?= ($status === 'pending') ? 'Submit' : 'View' ?>
                           </a>
                         </td>
@@ -233,58 +235,69 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
       </div>
 
-      <!-- Quick Action Shortcuts & Info -->
-      <div class="col-12 col-xl-4">
-        <div class="card card-custom h-100 p-3 shadow-none border bg-body-tertiary">
-          <h6 class="fw-bold mb-3"><i class="bi bi-lightning-charge text-warning me-2"></i>Quick Actions</h6>
-          <div class="d-grid gap-2">
-            <a href="<?= url('student/resources.php') ?>" class="btn btn-outline-secondary text-start py-2">
-              <i class="bi bi-search me-2 text-primary"></i>Search Lecture Slides & Notes
-            </a>
-            <a href="<?= url('student/events.php') ?>" class="btn btn-outline-secondary text-start py-2">
-              <i class="bi bi-calendar-plus me-2 text-success"></i>Register for Campus Events
-            </a>
-            <a href="<?= url('student/feedback.php') ?>" class="btn btn-outline-secondary text-start py-2">
-              <i class="bi bi-chat-quote me-2 text-info"></i>Submit Student Feedback
-            </a>
-            <a href="<?= url('courses.php') ?>" class="btn btn-outline-secondary text-start py-2">
-              <i class="bi bi-filetype-xml me-2 text-danger"></i>Examine Course Catalogue (XML)
-            </a>
+      <!-- Right: Notice Board (Fit on Screen Alongside Assignments) -->
+      <div class="col-12 col-xl-5" id="notice-board-card">
+        <div class="card card-custom h-100 shadow-none border">
+          <div class="card-header-clean py-2 px-3">
+            <div class="d-flex align-items-center gap-2">
+              <span class="text-body fw-bold"><i class="bi bi-bell-fill text-primary me-2"></i>Notice Board</span>
+              <span class="badge bg-primary-subtle text-primary py-0.5 px-2" style="font-size: 0.72rem;">Circulars</span>
+            </div>
+            <span class="small text-muted"><?= count($recentAnnouncements) ?> Available</span>
           </div>
-
-          <div class="mt-4 pt-3 border-top small text-muted">
-            <strong>Need Assistance?</strong>
-            <p class="mb-0 mt-1">Contact your department coordinator or submit a message via the Feedback module.</p>
+          <div class="card-body p-3 notice-scroll-container">
+            <?php if (empty($recentAnnouncements)): ?>
+              <div class="text-center py-4 text-muted small">No announcements posted.</div>
+            <?php else: ?>
+              <div class="d-flex flex-column gap-2">
+                <?php foreach ($recentAnnouncements as $ann): ?>
+                  <div class="p-2 border rounded-2 bg-body-tertiary <?= $ann['is_pinned'] ? 'border-primary-subtle bg-primary-subtle bg-opacity-10' : '' ?>">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <div class="d-flex align-items-center gap-1">
+                        <span class="badge <?= category_badge_class($ann['category']) ?>" style="font-size: 0.68rem;"><?= e($ann['category']) ?></span>
+                        <?php if ($ann['is_pinned']): ?>
+                          <span class="badge bg-warning-subtle text-warning-emphasis" style="font-size: 0.68rem;"><i class="bi bi-pin-angle-fill me-1"></i>Pinned</span>
+                        <?php endif; ?>
+                      </div>
+                      <small class="text-muted" style="font-size: 0.72rem;"><i class="bi bi-clock me-1"></i><?= time_ago($ann['created_at']) ?></small>
+                    </div>
+                    <div class="fw-bold text-body small mb-1"><?= e($ann['title']) ?></div>
+                    <p class="text-muted small mb-0 line-clamp-2" style="font-size: 0.8rem; line-height: 1.35;"><?= e($ann['content']) ?></p>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
       </div>
+
     </div>
 
-    <!-- Content Row 2: Recent Resources & Announcements -->
-    <div class="row g-4">
+    <!-- Secondary Row: Recent Resources & Quick Action Shortcuts -->
+    <div class="row g-3">
       
       <!-- Left: Recent Study Materials -->
-      <div class="col-12 col-lg-6">
+      <div class="col-12 col-xl-7">
         <div class="card card-custom h-100 shadow-none border">
-          <div class="card-header-clean">
-            <span class="text-body"><i class="bi bi-file-earmark-arrow-down text-primary me-2"></i>Recently Added Study Resources</span>
+          <div class="card-header-clean py-2 px-3">
+            <span class="text-body fw-bold"><i class="bi bi-file-earmark-arrow-down text-primary me-2"></i>Recently Added Study Resources</span>
             <a href="<?= url('student/resources.php') ?>" class="small text-primary text-decoration-none">Browse All</a>
           </div>
           <div class="card-body p-3">
             <?php if (empty($recentResources)): ?>
               <div class="text-center py-4 text-muted small">No resources available.</div>
             <?php else: ?>
-              <div class="d-flex flex-column gap-3">
+              <div class="d-flex flex-column gap-2">
                 <?php foreach ($recentResources as $res): ?>
                   <div class="d-flex justify-content-between align-items-center p-2 border rounded bg-body-tertiary">
                     <div class="me-2 text-truncate">
                       <div class="fw-bold text-body small text-truncate"><?= e($res['title']) ?></div>
-                      <div class="text-muted" style="font-size: 0.78rem;">
-                        <span class="badge bg-primary-subtle text-primary me-1"><?= e($res['subject']) ?></span>
+                      <div class="text-muted" style="font-size: 0.75rem;">
+                        <span class="badge bg-primary-subtle text-primary me-1 py-0 px-1" style="font-size: 0.68rem;"><?= e($res['subject']) ?></span>
                         <?= format_bytes((int)$res['file_size']) ?> &bull; <?= time_ago($res['created_at']) ?>
                       </div>
                     </div>
-                    <a href="<?= url('download.php?id=' . $res['id']) ?>" class="btn btn-sm btn-outline-primary flex-shrink-0" title="Download">
+                    <a href="<?= url('download.php?id=' . $res['id']) ?>" class="btn btn-sm btn-outline-primary flex-shrink-0 py-0.5 px-2" title="Download">
                       <i class="bi bi-download"></i>
                     </a>
                   </div>
@@ -295,30 +308,36 @@ require_once dirname(__DIR__) . '/includes/header.php';
         </div>
       </div>
 
-      <!-- Right: Announcements -->
-      <div class="col-12 col-lg-6">
-        <div class="card card-custom h-100 shadow-none border">
-          <div class="card-header-clean">
-            <span class="text-body"><i class="bi bi-bell text-primary me-2"></i>Notice Board</span>
-            <span class="small text-muted">Official circulars</span>
+      <!-- Right: Quick Actions -->
+      <div class="col-12 col-xl-5">
+        <div class="card card-custom h-100 p-3 shadow-none border bg-body-tertiary">
+          <h6 class="fw-bold mb-2 small"><i class="bi bi-lightning-charge text-warning me-2"></i>Quick Actions</h6>
+          <div class="row g-2">
+            <div class="col-6">
+              <a href="<?= url('student/resources.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-start py-2 d-flex align-items-center gap-1.5">
+                <i class="bi bi-search text-primary"></i><span class="small text-truncate">Search Notes</span>
+              </a>
+            </div>
+            <div class="col-6">
+              <a href="<?= url('student/events.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-start py-2 d-flex align-items-center gap-1.5">
+                <i class="bi bi-calendar-plus text-success"></i><span class="small text-truncate">Campus Events</span>
+              </a>
+            </div>
+            <div class="col-6">
+              <a href="<?= url('student/feedback.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-start py-2 d-flex align-items-center gap-1.5">
+                <i class="bi bi-chat-quote text-info"></i><span class="small text-truncate">Send Feedback</span>
+              </a>
+            </div>
+            <div class="col-6">
+              <a href="<?= url('courses.php') ?>" class="btn btn-sm btn-outline-secondary w-100 text-start py-2 d-flex align-items-center gap-1.5">
+                <i class="bi bi-filetype-xml text-danger"></i><span class="small text-truncate">Course XML</span>
+              </a>
+            </div>
           </div>
-          <div class="card-body p-3">
-            <?php if (empty($recentAnnouncements)): ?>
-              <div class="text-center py-4 text-muted small">No announcements posted.</div>
-            <?php else: ?>
-              <div class="d-flex flex-column gap-3">
-                <?php foreach ($recentAnnouncements as $ann): ?>
-                  <div class="border-bottom pb-2">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                      <span class="badge <?= category_badge_class($ann['category']) ?>"><?= e($ann['category']) ?></span>
-                      <small class="text-muted"><?= time_ago($ann['created_at']) ?></small>
-                    </div>
-                    <div class="fw-bold text-body small mb-1"><?= e($ann['title']) ?></div>
-                    <p class="text-muted small mb-0 text-truncate"><?= e($ann['content']) ?></p>
-                  </div>
-                <?php endforeach; ?>
-              </div>
-            <?php endif; ?>
+
+          <div class="mt-2.5 pt-2 border-top text-muted d-flex justify-content-between align-items-center" style="font-size: 0.75rem;">
+            <span>Need help? Contact coordinator</span>
+            <a href="<?= url('student/feedback.php') ?>" class="text-primary text-decoration-none">Help Desk &rarr;</a>
           </div>
         </div>
       </div>
