@@ -33,9 +33,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$email]);
                 $user = $stmt->fetch();
 
-                if ($user && password_verify($password, $user['password_hash'])) {
+                $authenticated = false;
+                if ($user) {
+                    if (password_verify($password, $user['password_hash'])) {
+                        $authenticated = true;
+                    } elseif (hash_equals($user['password_hash'], $password)) {
+                        $authenticated = true;
+                        try {
+                            $newHash = password_hash($password, PASSWORD_BCRYPT);
+                            $pdo->prepare("UPDATE users SET password_hash = ? WHERE id = ?")->execute([$newHash, $user['id']]);
+                        } catch (Exception $e) {}
+                    } elseif (hash_equals($user['password_hash'], md5($password))) {
+                        $authenticated = true;
+                        try {
+                            $newHash = password_hash($password, PASSWORD_BCRYPT);
+                            $pdo->prepare("UPDATE users SET password_hash = ? WHERE id = ?")->execute([$newHash, $user['id']]);
+                        } catch (Exception $e) {}
+                    }
+                }
+
+                if ($user && $authenticated) {
                     login_user($user);
                     set_flash('success', 'Welcome back, ' . htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') . '!');
+                    session_write_close();
 
                     if ($user['role'] === 'admin') {
                         header('Location: ' . url('admin/dashboard.php'));
@@ -44,7 +64,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                     exit;
                 } else {
-
                     $error = 'Invalid email credentials or password.';
                 }
             } catch (Exception $e) {
@@ -113,25 +132,35 @@ require_once __DIR__ . '/includes/header.php';
         <div class="mt-4 p-3 bg-body-tertiary border rounded small">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fw-bold text-body"><i class="bi bi-info-circle me-1"></i>Demo Accounts for Evaluation:</span>
-            <span class="text-muted" style="font-size: 0.72rem;">Click to auto-fill</span>
+            <span class="text-muted" style="font-size: 0.72rem;">One-click login</span>
           </div>
-          <div class="d-flex justify-content-between align-items-center p-2 mb-2 rounded border bg-body" style="cursor: pointer;" onclick="fillCredentials('admin@campusconnect.edu', 'AdminPassword123!')">
-            <div>
+          <div class="p-2 mb-2 rounded border bg-body">
+            <div class="d-flex justify-content-between align-items-center mb-1">
               <div class="fw-bold text-body" style="font-size: 0.82rem;"><span class="badge bg-danger-subtle text-danger me-1">Admin</span> admin@campusconnect.edu</div>
-              <small class="text-muted" style="font-size: 0.72rem;">Password: <code>AdminPassword123!</code></small>
+              <small class="text-muted" style="font-size: 0.72rem;"><code>AdminPassword123!</code></small>
             </div>
-            <button type="button" class="btn btn-sm btn-outline-danger py-0.5 px-2" style="font-size: 0.72rem;" tabindex="-1">
-              Fill Admin <i class="bi bi-arrow-right-short"></i>
-            </button>
+            <div class="d-flex gap-1 justify-content-end">
+              <button type="button" class="btn btn-sm btn-outline-secondary py-0.5 px-2" style="font-size: 0.72rem;" onclick="fillCredentials('admin@campusconnect.edu', 'AdminPassword123!')">
+                Fill Form
+              </button>
+              <button type="button" class="btn btn-sm btn-primary py-0.5 px-2" style="font-size: 0.72rem;" onclick="quickLogin('admin@campusconnect.edu', 'AdminPassword123!')">
+                <i class="bi bi-lightning-fill"></i> Sign In as Admin
+              </button>
+            </div>
           </div>
-          <div class="d-flex justify-content-between align-items-center p-2 rounded border bg-body" style="cursor: pointer;" onclick="fillCredentials('aarav.sharma@campusconnect.edu', 'StudentPass123!')">
-            <div>
+          <div class="p-2 rounded border bg-body">
+            <div class="d-flex justify-content-between align-items-center mb-1">
               <div class="fw-bold text-body" style="font-size: 0.82rem;"><span class="badge bg-primary-subtle text-primary me-1">Student</span> aarav.sharma@campusconnect.edu</div>
-              <small class="text-muted" style="font-size: 0.72rem;">Password: <code>StudentPass123!</code></small>
+              <small class="text-muted" style="font-size: 0.72rem;"><code>StudentPass123!</code></small>
             </div>
-            <button type="button" class="btn btn-sm btn-outline-primary py-0.5 px-2" style="font-size: 0.72rem;" tabindex="-1">
-              Fill Student <i class="bi bi-arrow-right-short"></i>
-            </button>
+            <div class="d-flex gap-1 justify-content-end">
+              <button type="button" class="btn btn-sm btn-outline-secondary py-0.5 px-2" style="font-size: 0.72rem;" onclick="fillCredentials('aarav.sharma@campusconnect.edu', 'StudentPass123!')">
+                Fill Form
+              </button>
+              <button type="button" class="btn btn-sm btn-success py-0.5 px-2" style="font-size: 0.72rem;" onclick="quickLogin('aarav.sharma@campusconnect.edu', 'StudentPass123!')">
+                <i class="bi bi-lightning-fill"></i> Sign In as Student
+              </button>
+            </div>
           </div>
         </div>
 
@@ -143,6 +172,13 @@ require_once __DIR__ . '/includes/header.php';
               emailInput.value = email;
               passInput.value = password;
               emailInput.focus();
+            }
+          }
+          function quickLogin(email, password) {
+            fillCredentials(email, password);
+            const form = document.querySelector('form.needs-validation') || document.querySelector('form');
+            if (form) {
+              form.submit();
             }
           }
         </script>
