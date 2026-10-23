@@ -1,9 +1,16 @@
 <?php
 
 if (session_status() === PHP_SESSION_NONE) {
-
-    ini_set('session.cookie_httponly', 1);
-    ini_set('session.use_only_cookies', 1);
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.use_only_cookies', '1');
+    if (function_exists('session_set_cookie_params')) {
+        session_set_cookie_params([
+            'lifetime' => 604800,
+            'path'     => '/',
+            'httponly' => true,
+            'samesite' => 'Lax',
+        ]);
+    }
     session_start();
 }
 

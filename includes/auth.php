@@ -3,6 +3,9 @@
 require_once __DIR__ . '/functions.php';
 
 function is_logged_in(): bool {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     return !empty($_SESSION['user_id']) && !empty($_SESSION['user_role']);
 }
 
@@ -52,8 +55,9 @@ function require_role(string $role): void {
 }
 
 function login_user(array $user): void {
-
-    session_regenerate_id(true);
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
     $_SESSION['user_id']          = (int)$user['id'];
     $_SESSION['user_name']        = $user['name'];
@@ -62,6 +66,8 @@ function login_user(array $user): void {
     $_SESSION['user_department']  = $user['department'] ?? '';
     $_SESSION['user_roll_number'] = $user['roll_number'] ?? '';
     $_SESSION['logged_in_time']   = time();
+
+    session_regenerate_id(true);
 }
 
 function logout_user(): void {
