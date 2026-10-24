@@ -1,6 +1,9 @@
 <?php
 
 if (session_status() === PHP_SESSION_NONE) {
+    if (session_id() === '') {
+        session_name('CAMPUSCONNECT_SESSID');
+    }
     ini_set('session.cookie_httponly', '1');
     ini_set('session.use_only_cookies', '1');
     if (function_exists('session_set_cookie_params')) {
@@ -11,7 +14,7 @@ if (session_status() === PHP_SESSION_NONE) {
             'samesite' => 'Lax',
         ]);
     }
-    session_start();
+    @session_start();
 }
 
 function base_url(): string {
