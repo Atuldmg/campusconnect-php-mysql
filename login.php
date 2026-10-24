@@ -5,32 +5,47 @@ require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/csrf.php';
 
+$redirect = trim($_GET['redirect'] ?? $_POST['redirect'] ?? '');
+if ($redirect !== '' && (!str_starts_with($redirect, '/') || str_starts_with($redirect, '//'))) {
+    $redirect = '';
+}
+
 if (is_logged_in()) {
     $role = $_SESSION['user_role'] ?? 'student';
-    header('Location: ' . ($role === 'admin' ? url('admin/dashboard.php') : url('student/dashboard.php')));
+    if (!empty($redirect)) {
+        header('Location: ' . $redirect);
+    } else {
+        header('Location: ' . ($role === 'admin' ? url('admin/dashboard.php') : url('student/dashboard.php')));
+    }
     exit;
 }
 
 $pageTitle = 'Sign In';
 $error = '';
-$email = '';
+$loginInput = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = strtolower(trim($_POST['email'] ?? ''));
+    $loginInput = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
     if (!validate_csrf()) {
-        $error = 'Session security token expired. Please try again.';
+        $error = 'Session security token expired. Please refresh the page and try again.';
     } else {
-        if (empty($email) || empty($password)) {
-            $error = 'Please enter both your email address and password.';
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $error = 'Please provide a valid email address.';
+        if (empty($loginInput) || empty($password)) {
+            $error = 'Please enter both your identifier (email, roll number, or admin) and password.';
         } else {
             try {
                 $pdo = get_db_connection();
-                $stmt = $pdo->prepare("SELECT id, name, email, password_hash, role, department, roll_number FROM users WHERE LOWER(email) = ? LIMIT 1");
-                $stmt->execute([$email]);
+                $stmt = $pdo->prepare("
+                    SELECT id, name, email, password_hash, role, department, roll_number 
+                    FROM users 
+                    WHERE LOWER(email) = LOWER(?) 
+                       OR LOWER(roll_number) = LOWER(?)
+                       OR (LOWER(?) = 'admin' AND role = 'admin')
+                       OR LOWER(SUBSTRING_INDEX(email, '@', 1)) = LOWER(?)
+                    LIMIT 1
+                ");
+                $stmt->execute([$loginInput, $loginInput, $loginInput, $loginInput]);
                 $user = $stmt->fetch();
 
                 $authenticated = false;
@@ -55,16 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($user && $authenticated) {
                     login_user($user);
                     set_flash('success', 'Welcome back, ' . htmlspecialchars($user['name'], ENT_QUOTES, 'UTF-8') . '!');
-                    session_write_close();
 
-                    if ($user['role'] === 'admin') {
+                    if (!empty($redirect)) {
+                        header('Location: ' . $redirect);
+                    } elseif ($user['role'] === 'admin') {
                         header('Location: ' . url('admin/dashboard.php'));
                     } else {
                         header('Location: ' . url('student/dashboard.php'));
                     }
                     exit;
                 } else {
-                    $error = 'Invalid email credentials or password.';
+                    $error = 'Invalid credentials or password. Please check your details and try again.';
                 }
             } catch (Exception $e) {
                 error_log('Login error: ' . $e->getMessage());
@@ -98,12 +114,16 @@ require_once __DIR__ . '/includes/header.php';
 
         <form method="POST" action="<?= url('login.php') ?>" class="needs-validation" novalidate>
           <?= csrf_field() ?>
+          <?php if (!empty($redirect)): ?>
+            <input type="hidden" name="redirect" value="<?= e($redirect) ?>">
+          <?php endif; ?>
 
           <div class="mb-3">
-            <label for="email" class="form-label">Campus Email</label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-              <input type="email" class="form-control" id="email" name="email" value="<?= e($email) ?>" placeholder="user@campusconnect.edu" required autofocus>
+            <label for="email" class="form-label">Campus Email, Roll Number or Username</label>
+            <div class="input-group has-validation">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" class="form-control" id="email" name="email" value="<?= e($loginInput) ?>" placeholder="e.g. admin@campusconnect.edu or admin" required autofocus autocomplete="username">
+              <div class="invalid-feedback">Please enter your email, roll number, or admin username.</div>
             </div>
           </div>
 
@@ -111,12 +131,13 @@ require_once __DIR__ . '/includes/header.php';
             <div class="d-flex justify-content-between align-items-center">
               <label for="password" class="form-label mb-0">Password</label>
             </div>
-            <div class="input-group mt-1">
+            <div class="input-group has-validation mt-1">
               <span class="input-group-text"><i class="bi bi-lock"></i></span>
-              <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+              <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
               <button class="btn btn-outline-secondary password-toggle-btn" type="button" data-target="password" aria-label="Toggle password view">
                 <i class="bi bi-eye"></i>
               </button>
+              <div class="invalid-feedback">Please enter your password.</div>
             </div>
           </div>
 

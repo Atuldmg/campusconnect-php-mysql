@@ -6,7 +6,9 @@ require_once __DIR__ . '/includes/auth.php';
 
 if (!is_logged_in()) {
     set_flash('warning', 'Please sign in to download course materials.');
-    header('Location: ' . url('login.php'));
+    $currentUri = $_SERVER['REQUEST_URI'] ?? '';
+    $redirectParam = !empty($currentUri) ? '?redirect=' . urlencode($currentUri) : '';
+    header('Location: ' . url('login.php' . $redirectParam));
     exit;
 }
 

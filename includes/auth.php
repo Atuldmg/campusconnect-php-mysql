@@ -30,7 +30,9 @@ function has_role(string $role): bool {
 function require_login(): void {
     if (!is_logged_in()) {
         set_flash('warning', 'Please log in to access this portal page.');
-        header('Location: ' . url('login.php'));
+        $currentUri = $_SERVER['REQUEST_URI'] ?? '';
+        $redirectParam = !empty($currentUri) ? '?redirect=' . urlencode($currentUri) : '';
+        header('Location: ' . url('login.php' . $redirectParam));
         exit;
     }
 }
@@ -67,7 +69,7 @@ function login_user(array $user): void {
     $_SESSION['user_roll_number'] = $user['roll_number'] ?? '';
     $_SESSION['logged_in_time']   = time();
 
-    session_regenerate_id(true);
+    session_regenerate_id(false);
 }
 
 function logout_user(): void {
